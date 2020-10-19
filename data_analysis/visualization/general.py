@@ -1,7 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from matplotib import animation
-
+from matplotlib import animation, patches, colors
 
 def make_dot_overlay_animation(video_data, dot_locations, dot_timestamps=None, video_timestamps=None,
                                dot_widths=None, dot_colors=None, dot_labels=None, dot_markers=None, 
@@ -133,3 +132,57 @@ def make_dot_overlay_animation(video_data, dot_locations, dot_timestamps=None, v
                 interval=interval, 
                 blit=True)
     return anim
+
+
+def show_ellipse(ellipse, img=None, ax=None, **kwargs):
+    """Show opencv ellipse in matplotlib, optionally with image underlay
+
+    Parameters
+    ----------
+    ellipse : dict
+        dict of ellipse parameters derived from opencv, with fields:
+    img : array
+        underlay image to display
+    ax : matplotlib axis
+        axis into which to plot ellipse
+    kwargs : passed to matplotlib.patches.Ellipse
+    """
+    if ax is None:
+        fig, ax = plt.subplots()
+    ell = patches.Ellipse(ellipse['center'], *ellipse['axes'], angle=ellipse['angle'], **kwargs)    
+    if img is not None:
+        ax.imshow(img, cmap='gray')
+    ax.add_patch(ell)
+    ax.scatter(ellipse['center'][0], ellipse['center'][1], color='r')
+
+
+def colormap_2d(data0, data1, image_cmap, vmin0=None, vmax0=None, vmin1=None, vmax1=None, map_to_uint8=False):
+    """Map values in two dimensions to color according to a 2D color map image
+    
+    Parameters
+    ----------
+    data0 : array (1d)
+        First dimension of data to map
+    data1 : array (1d)
+        Second dimension of data to map
+    image_cmap : array (3d)
+        image of values to use for 2D color map
+
+    """    
+    norm0 = colors.Normalize(vmin0, vmax0)
+    norm1 = colors.Normalize(vmin1, vmax1)
+    
+    d0 = np.clip(norm0(data0), 0, 1)
+    d1 = np.clip(1 - norm1(data1), 0, 1)
+    dim0 = np.round(d0 * (image_cmap.shape[1]-1))
+    # Nans in data seemed to cause weird interaction with conversion to uint32
+    dim0 = np.nan_to_num(dim0).astype(np.uint32) 
+    dim1 = np.round(d1 * (image_cmap.shape[0]-1))
+    dim1 = np.nan_to_num(dim1).astype(np.uint32)
+
+    colored = image_cmap[dim1.ravel(), dim0.ravel()]
+    # May be useful to map r, g, b, a values between 0 and 255 
+    # to avoid problems with diff plotting functions...?
+    if map_to_uint8:
+        colored = (colored * 255).astype(np.uint8)
+    return colored

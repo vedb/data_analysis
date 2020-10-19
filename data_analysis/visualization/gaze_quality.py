@@ -1,18 +1,10 @@
-import yaml
-import sys
-import os
+import matplotlib.pyplot as plt
+from matplotlib import cm
+import numpy as np
 import cv2
 
-# Todo: This should not be here, most probably goes into vm_tools
 def plot_gaze_accuracy(self, markerPosition, gazeDataFrame, gazeIndex):
-
-    import pandas as pd
-    import numpy as np
-    import os
-    import matplotlib.pyplot as plt
-    import cv2
-    from matplotlib import cm
-    
+    """"""    
     horizontal_pixels = 1280
     vertical_pixels = 1024
     horizontal_FOV = 92.5
@@ -78,3 +70,30 @@ def plot_gaze_accuracy(self, markerPosition, gazeDataFrame, gazeIndex):
 
     #plt.savefig(dataPath + '/offline_data/gaze_accuracy_'+str(start_seconds)+'_'+ str(end_seconds)+'.png', dpi = 200 )
     plt.show()
+
+
+def plot_calibration(point_mapper, ):
+    fig, ax = plt.subplots(1, 2, figsize=(8,4))
+    ax[0].imshow(eye_video[0])
+    # Alpha of 0.75
+    cols_2d[:,3] = 0.75
+    confidence_thresh = 0.8
+
+    pupil_keep = np.all(measured_pos > 0, axis=1) & (pupil_confidence > confidence_thresh)# 97% of data for this data set
+
+    measured_pos_good = measured_pos[pupil_keep, :]
+
+    dot_h = ax[0].plot(measured_pos_good[::4,0], measured_pos_good[::4,1],'r.', alpha=0.03)
+    grid_h = ax[0].scatter(eye_grid_x.flatten() * 192, eye_grid_y.flatten() * 192, c=cols_2d, s=5)
+    for dh in dot_h:
+        dh.zorder = 1
+    grid_h.zorder = 2
+    ax[1].imshow(world_vid[0])
+    dot_h2 = ax[1].plot(gaze_pos[::4,0] * vhdim, gaze_pos[::4,1] * vvdim,'r.', alpha=0.03)
+    grid_h2 = ax[1].scatter(imgrid[:,0] * vhdim, imgrid[:,1] * vvdim, c=cols_2d, s=20, marker='.')
+    for dh in dot_h2:
+        dh.zorder = 1
+    grid_h2.zorder = 2
+
+    #ax[1].set_ylim([vvdim, 0])
+    #ax[1].set_xlim([0, vhdim])

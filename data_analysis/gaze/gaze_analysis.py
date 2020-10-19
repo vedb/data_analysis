@@ -3,7 +3,7 @@ import sys
 import os
 import cv2
 
-# Todo: This should not be here, most probably goes into vm_tools
+
 def calibrate_gaze(cyclopeanPOR_XY, truePOR_XY, method = cv2.RANSAC, threshold = 5, plottingFlag = False):
 
     result = cv2.findHomography(cyclopeanPOR_XY, truePOR_XY, method = method , ransacReprojThreshold = threshold)
