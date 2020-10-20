@@ -76,7 +76,8 @@ def plabs_detect_pupil(eye_video, timestamps=None, progress_bar=None, id=None, p
         # Call detector & process output
         out = det.detect(fr)
         # Get rid of raw data as input; no need to keep
-        _ = out.pop('internal_2d_raw_data')
+        if 'internal_2d_raw_data' in out:
+            _ = out.pop('internal_2d_raw_data')
         # Save average luminance of eye video for reference
         out['luminance'] = fr.mean()
         # Normalized position
