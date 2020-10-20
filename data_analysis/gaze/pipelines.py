@@ -130,6 +130,7 @@ def pupil_monocular_v01(session_folder,
 		# Run marker detection
 		ref_list = vmp.utils.batch_run(fn_marker, inputs_marker, 
 			batch_size=batch_size_marker,
+			batch_combine_fn=vmp.utils.list_reduce,
 			scale=marker_rescale,
 			progress_bar=progress_bar)
 		# Get arrays instead of dicts
