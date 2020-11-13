@@ -6,21 +6,21 @@ import cv2
 
 def onoff_from_binary(data, return_duration=True):
     """Converts a binary variable data into onsets, offsets, and optionally durations
-    
-    This may yield unexpected behavior if the first value of `data` is true. 
-    
+
+    This may yield unexpected behavior if the first value of `data` is true.
+
     Parameters
     ----------
     data : array-like, 1D
         binary array from which onsets and offsets should be extracted
-    
+
     """
     data = data.astype(np.float).copy()
     ddata = np.hstack([[0], np.diff(data)])
-    onsets, = np.nonzero(ddata > 0)
-    #print(onsets)
-    offsets, = np.nonzero(ddata < 0)
-    #print(offsets)
+    (onsets,) = np.nonzero(ddata > 0)
+    # print(onsets)
+    (offsets,) = np.nonzero(ddata < 0)
+    # print(offsets)
     onset_first = onsets[0] < offsets[0]
     len(onsets) == len(offsets)
 
@@ -42,7 +42,7 @@ def onoff_from_binary(data, return_duration=True):
         if on_at_start:
             duration[0] = offsets[0] - 0
         onoff = np.vstack([onoff, duration])
-    
+
     onoff = onoff.T.astype(np.int)
     return onoff
 

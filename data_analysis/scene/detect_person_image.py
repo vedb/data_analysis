@@ -18,18 +18,17 @@ import argparse
 import os
 
 # Set the input arguments to the function and their types
-parser = argparse.ArgumentParser(description='Detects a person in an image')
-parser.add_argument('-file_name', type=str, nargs=1,
-                    help='input image file name')
+parser = argparse.ArgumentParser(description="Detects a person in an image")
+parser.add_argument("-file_name", type=str, nargs=1, help="input image file name")
 
 # Read the input arguments passed to the function and print them out
 args = parser.parse_args()
 
 # Loading image
 file_name = args.file_name[0]
-print('Reading: ', os.getcwd() + '/ObjectDetectionData/' + file_name)
-img = cv2.imread(os.getcwd() + '/ObjectDetectionData/' + file_name)
-#img = cv2.resize(img, None, fx=0.8, fy=0.8)
+print("Reading: ", os.getcwd() + "/ObjectDetectionData/" + file_name)
+img = cv2.imread(os.getcwd() + "/ObjectDetectionData/" + file_name)
+# img = cv2.resize(img, None, fx=0.8, fy=0.8)
 gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 height, width, channels = img.shape
 
@@ -49,10 +48,10 @@ blob = cv2.dnn.blobFromImage(img, 0.00392, (416, 416), (0, 0, 0), True, crop=Fal
 net.setInput(blob)
 outs = net.forward(output_layers)
 
-# fontScale 
+# fontScale
 fontScale = 1
-   
-# Line thickness of 2 px 
+
+# Line thickness of 2 px
 thickness = 1
 
 total_object_count = 5
@@ -82,21 +81,21 @@ for out in outs:
             class_ids.append(class_id)
 
 indexes = cv2.dnn.NMSBoxes(boxes, confidences, 0.5, 0.4)
-#print(indexes)
-print('Detected Objects: ')
+# print(indexes)
+print("Detected Objects: ")
 font = cv2.FONT_HERSHEY_PLAIN
 for i in range(len(boxes)):
-    if str(classes[class_ids[i]]) == 'person':
+    if str(classes[class_ids[i]]) == "person":
         x, y, w, h = boxes[i]
         label = str(classes[class_ids[i]])
-        print(label, np.round(confidences[i],2))
+        print(label, np.round(confidences[i], 2))
         color = colors[i]
         cv2.rectangle(img, (x, y), (x + w, y + h), color, 2)
         cv2.putText(img, label, (x, y + 30), font, 1.5, color, 2, cv2.LINE_AA)
 
 cv2.imshow("Image", img)
-while (cv2.waitKey(0) & 0xFF == ord('q')):
+while cv2.waitKey(0) & 0xFF == ord("q"):
     cv2.destroyAllWindows()
 # Save the output image with detected objects
-cv2.imwrite('output_person_'+ file_name, img)
-print('Done!')
+cv2.imwrite("output_person_" + file_name, img)
+print("Done!")

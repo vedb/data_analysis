@@ -1,9 +1,13 @@
+import numpy as np
 from .gaze_utils import onoff_from_binary
-from pupil_recording_interface.externals.data_processing import _filter_pupil_list_by_confidence, \
-                                                                _extract_2d_data_monocular, \
-                                                                _extract_2d_data_binocular, \
-                                                                _match_data
+from pupil_recording_interface.externals.data_processing import (
+    _filter_pupil_list_by_confidence,
+    _extract_2d_data_monocular,
+    _extract_2d_data_binocular,
+    _match_data,
+)
 from pupil_recording_interface.externals import calibrate_2d
+
 
 def get_data(pupil_list, ref_list, mode="2d", min_calibration_confidence=0.7):
     """Returns extracted data for calibration and whether there is binocular data
@@ -12,7 +16,7 @@ def get_data(pupil_list, ref_list, mode="2d", min_calibration_confidence=0.7):
     ----------
     pupil_list :
 
-    ref_list : 
+    ref_list :
     """
 
     pupil_list = _filter_pupil_list_by_confidence(
@@ -40,9 +44,7 @@ def get_data(pupil_list, ref_list, mode="2d", min_calibration_confidence=0.7):
     elif mode == "2d":
         if matched_binocular_data:
             binocular = True
-            cal_pt_cloud_binocular = _extract_2d_data_binocular(
-                matched_binocular_data
-            )
+            cal_pt_cloud_binocular = _extract_2d_data_binocular(matched_binocular_data)
             cal_pt_cloud0 = _extract_2d_data_monocular(matched_pupil0_data)
             cal_pt_cloud1 = _extract_2d_data_monocular(matched_pupil1_data)
             extracted_data = (
@@ -63,12 +65,12 @@ def select_calibration_times(circle_positions, frame_times, stable_time=0.6):
     # Find points with at least something detected
     circle_detected = np.all(~np.isnan(circle_positions), 1)
     on, off, dur = onoff_from_binary(circle_detected, return_duration=True).T
-    
+
     durations = frame_times[off] - frame_times[on]
-    #print(durations)
+    # print(durations)
     keep = durations > stable_time
     out = np.vstack([frame_times[on[keep]], frame_times[off[keep]]]).T
-    return out 
+    return out
 
 
 def calibrate_2d_monocular(cal_pt_cloud, frame_size):

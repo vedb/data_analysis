@@ -12,7 +12,7 @@ def detect_checkerboard(path, checkerboard_size, scale, start_seconds, end_secon
     cols = checkerboard_size[1]
     scale_x = scale[0]
     scale_y = scale[1]
-    sub_folder = '/000/'
+    sub_folder = "/000/"
 
     # Todo: Pass fps as an argument
     fps = 30
@@ -32,25 +32,29 @@ def detect_checkerboard(path, checkerboard_size, scale, start_seconds, end_secon
     objpoints = []  # 3d point in real world space
     imgpoints = []  # 2d points in image plane.
 
-    gaze_data_frame = pd.read_csv(path + 'exports' + sub_folder + 'gaze_positions.csv')
-    world_time_stamps = np.load(path + 'world_timestamps.npy')
+    gaze_data_frame = pd.read_csv(path + "exports" + sub_folder + "gaze_positions.csv")
+    world_time_stamps = np.load(path + "world_timestamps.npy")
 
-    print('reading video: ', path + 'world.mp4')
-    cap = cv2.VideoCapture(path + 'world.mp4')
+    print("reading video: ", path + "world.mp4")
+    cap = cv2.VideoCapture(path + "world.mp4")
     frame_numbers = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
-    print('Total Number of Frames: ', frame_numbers)
+    print("Total Number of Frames: ", frame_numbers)
 
     start_index = (start_seconds + safe_margin) * fps
     end_index = (end_seconds - safe_margin) * fps
-    print('First Frame = %d' % start_index)
-    print('Last Frame = %d' % end_index)
+    print("First Frame = %d" % start_index)
+    print("Last Frame = %d" % end_index)
 
-    print('scale[x,y] = ', scale_x, scale_y)
+    print("scale[x,y] = ", scale_x, scale_y)
 
-    my_string = '-'
+    my_string = "-"
     for count in range(0, frame_numbers):
 
-        print("Progress: {0:.1f}% {s}".format(count * 100 / frame_numbers, s=my_string), end="\r", flush=False)
+        print(
+            "Progress: {0:.1f}% {s}".format(count * 100 / frame_numbers, s=my_string),
+            end="\r",
+            flush=False,
+        )
         if count < start_index:
             ret, frame = cap.read()
             continue
@@ -77,17 +81,31 @@ def detect_checkerboard(path, checkerboard_size, scale, start_seconds, end_secon
                 img_1 = cv2.drawChessboardCorners(img, (6, 8), corners2, ret)
 
                 gaze_index = np.argmin(
-                    np.abs((gaze_data_frame.gaze_timestamp.values - world_time_stamps[count]).astype(float)))
+                    np.abs(
+                        (
+                            gaze_data_frame.gaze_timestamp.values
+                            - world_time_stamps[count]
+                        ).astype(float)
+                    )
+                )
                 gaze_norm_x = gaze_data_frame.norm_pos_x.values[gaze_index]
                 gaze_norm_y = gaze_data_frame.norm_pos_y.values[gaze_index]
 
                 gaze_pixel_x = int(gaze_norm_x * horizontal_pixels * scale_x)
                 gaze_pixel_y = int((1 - gaze_norm_y) * vertical_pixels * scale_y)
-                img_1 = cv2.circle(img_1, (gaze_pixel_x, gaze_pixel_y), 10, (255,255,0), 8)
+                img_1 = cv2.circle(
+                    img_1, (gaze_pixel_x, gaze_pixel_y), 10, (255, 255, 0), 8
+                )
 
                 corners2 = np.squeeze(corners2)
                 marker_position = np.mean(corners2, axis=0)
-                img_1 = cv2.circle(img_1, (marker_position[0], marker_position[1]), 6, (255,255,255), 8)
+                img_1 = cv2.circle(
+                    img_1,
+                    (marker_position[0], marker_position[1]),
+                    6,
+                    (255, 255, 255),
+                    8,
+                )
                 # Todo: Create a separate function for adding text info on the frame
                 # font
                 font = cv2.FONT_HERSHEY_SIMPLEX
@@ -99,10 +117,13 @@ def detect_checkerboard(path, checkerboard_size, scale, start_seconds, end_secon
                 color = (0, 255, 255)
                 # Line thickness of 2 px
                 thickness = 1
-                text = 'confidence: ' + str(np.round(gaze_data_frame.confidence.values[gaze_index], 3))
+                text = "confidence: " + str(
+                    np.round(gaze_data_frame.confidence.values[gaze_index], 3)
+                )
                 # Using cv2.putText() method
-                img = cv2.putText(img_1, text, org, font,
-                                    font_scale, color, thickness, cv2.LINE_AA)
+                img = cv2.putText(
+                    img_1, text, org, font, font_scale, color, thickness, cv2.LINE_AA
+                )
 
                 # print('before : ', corners)
                 corners2[:, 0] = corners2[:, 0] * (1 / scale_x)
@@ -112,13 +133,13 @@ def detect_checkerboard(path, checkerboard_size, scale, start_seconds, end_secon
                 imgpoints.append(corners2)
                 image_list.append(img_1)
                 marker_found_index.append(count)
-                my_string = '1'
+                my_string = "1"
             else:
-                my_string = '0'
-            cv2.imshow('img', img)
-            if cv2.waitKey(2) & 0xFF == ord('q'):
+                my_string = "0"
+            cv2.imshow("img", img)
+            if cv2.waitKey(2) & 0xFF == ord("q"):
                 break
-    print('\nDone!')
+    print("\nDone!")
     cv2.destroyAllWindows()
 
     return imgpoints, image_list, marker_found_index
@@ -128,7 +149,7 @@ if __name__ == "__main__":
 
     # dataPath = '/hdd01/kamran_sync/vedb/recordings_pilot/pilot_study_1/423/'
     dataPath = "/home/veddy06/kamran_sync/vedb/recordings_pilot/pilot_study_1/423/"
-    subFolder = '/000/'
+    subFolder = "/000/"
 
     fps = 30
     safeMargin = 5
@@ -140,4 +161,6 @@ if __name__ == "__main__":
     # to speed up the process
     scale_factor = (0.5, 0.5)
 
-    points, images, marker_index = detect_checkerboard(dataPath, checker_board_size, scale_factor, start, end)
+    points, images, marker_index = detect_checkerboard(
+        dataPath, checker_board_size, scale_factor, start, end
+    )
