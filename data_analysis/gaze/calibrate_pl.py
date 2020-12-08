@@ -86,3 +86,35 @@ def calibrate_2d_monocular(cal_pt_cloud, frame_size):
     args = {"params": params}
     result = {"subject": "start_plugin", "name": mapper, "args": args}
     return method, result
+
+
+def calibrate_2d_binocular(cal_pt_cloud_binocular, cal_pt_cloud0,
+                           cal_pt_cloud1, frame_size):
+    method = "binocular polynomial regression"
+
+    map_fn, inliers, params = calibrate_2d.calibrate_2d_polynomial(
+        cal_pt_cloud_binocular, frame_size, binocular=True
+    )
+    if not inliers.any():
+        return method, None
+
+    map_fn, inliers, params_eye0 = calibrate_2d.calibrate_2d_polynomial(
+        cal_pt_cloud0, frame_size, binocular=False
+    )
+    if not inliers.any():
+        return method, None
+
+    map_fn, inliers, params_eye1 = calibrate_2d.calibrate_2d_polynomial(
+        cal_pt_cloud1, frame_size, binocular=False
+    )
+    if not inliers.any():
+        return method, None
+
+    mapper = "Binocular_Gaze_Mapper"
+    args = {
+        "params": params,
+        "params_eye0": params_eye0,
+        "params_eye1": params_eye1,
+    }
+    result = {"subject": "start_plugin", "name": mapper, "args": args}
+    return method, result
