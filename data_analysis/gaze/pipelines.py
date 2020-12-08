@@ -65,6 +65,7 @@ def pupil_monocular_v01(
             fpaths=dict(eye_video=eye_left_video_file, timestamps=eye_left_time_file,),
             variable_names=None,
         )
+        print("\n\nRunning pupil detection for the left eye\n\n")
         # Run pupil detection
         pupil_list_left = vmp.utils.batch_run(
             fn_pupil,
@@ -98,6 +99,7 @@ def pupil_monocular_v01(
             ),
             variable_names=None,
         )
+        print("\n\nRunning pupil detection for the right eye\n\n")
         # Run pupil detection
         pupil_list_right = vmp.utils.batch_run(
             fn_pupil,
@@ -135,6 +137,7 @@ def pupil_monocular_v01(
             fpaths=dict(video_data=world_video_file, timestamps=world_time_file),
             variable_names=None,
         )
+        print("\n\nRunning marker detection \n\n")
         # Run marker detection
         ref_list = vmp.utils.batch_run(
             fn_marker,
@@ -151,11 +154,13 @@ def pupil_monocular_v01(
 
     # (3) Calibrate
     # Get data for pupil calibration
+    print("\n\nGetting data for calibration \n\n")
     is_binocular, matched_data_left = calibrate_pl.get_data(pupil_list_left, ref_list)
     # Run calibration
     # NOTE: zero index for matched_data here is because this is simply monocular,
     # and matched data only returns a 1-long tuple. If we want binocular, this will
     # need changing.
+    print("\n\nRunning 2d monocular calibration [left eye] \n\n")
     method, result_left = calibrate_pl.calibrate_2d_monocular(
         matched_data_left[0], frame_size=(video_vdim, video_hdim)
     )
@@ -165,6 +170,7 @@ def pupil_monocular_v01(
 
     # (4) Map gaze to video coordinates
     # Mapper takes two inputs: normalized pupil x and y position
+    print("\n\nRunning gaze mapper [left eye] \n\n")
     pupil_x, pupil_y = pupil_arrays_left["norm_pos"].T
     gaze_left = mapper_left([pupil_x, pupil_y])
     # Transpose output so time is the first dimension
@@ -175,6 +181,7 @@ def pupil_monocular_v01(
     # NOTE: zero index for matched_data here is because this is simply monocular,
     # and matched data only returns a 1-long tuple. If we want binocular, this will
     # need changing.
+    print("\n\nRunning 2d monocular calibration [right eye] \n\n")
     method, result_right = calibrate_pl.calibrate_2d_monocular(
         matched_data_right[0], frame_size=(video_vdim, video_hdim)
     )
@@ -184,6 +191,7 @@ def pupil_monocular_v01(
 
     # (4) Map gaze to video coordinates
     # Mapper takes two inputs: normalized pupil x and y position
+    print("\n\nRunning gaze mapper [right eye] \n\n")
     pupil_x, pupil_y = pupil_arrays_right["norm_pos"].T
     gaze_right = mapper_right([pupil_x, pupil_y])
     # Transpose output so time is the first dimension
