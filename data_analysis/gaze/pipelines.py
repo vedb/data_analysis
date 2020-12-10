@@ -6,7 +6,7 @@ import tqdm
 import os
 from . import pupil_detection_pl, calibrate_pl
 from . import marker_detection, gaze_utils
-
+from pupil_recording_interface.externals.gaze_mappers import Binocular_Gaze_Mapper
 
 def pupil_2d_monocular_v01(
     session_folder,
@@ -351,11 +351,15 @@ def pupil_2d_binocular_v01(
     # (3) Append left and right pupil lists
     # Append the two pupil lists (list of dicts compatible with pupil notation)
     # And then pass the appended list to the calibration routine
+
     pupil_list_binocular = []
     pupil_list_binocular.extend(pupil_list_left)
     pupil_list_binocular.extend(pupil_list_right)
+
     # Get arrays instead of list of dicts
     pupil_arrays_binocular = gaze_utils.dictlist_to_arraydict(pupil_list_binocular)
+    pupil_arrays_right = gaze_utils.dictlist_to_arraydict(pupil_list_right)
+    pupil_arrays_left = gaze_utils.dictlist_to_arraydict(pupil_list_left)
 
     print("\n\nAppending left and right pupil positions")
     print("left:{} right:{} binocular:{} \n\n".format(len(pupil_list_left), len(pupil_list_right), len(pupil_list_binocular)))
@@ -363,23 +367,22 @@ def pupil_2d_binocular_v01(
     # (4) Calibrate
     # Get data for pupil calibration
     print("\n\nGetting data for calibration \n\n")
-    is_binocular, matched_data_binocular = calibrate_pl.get_data(pupil_list_binocular, ref_list)
+    is_binocular, matched_data_binocular = calibrate_pl.get_data(pupil_list_binocular, ref_list, mode="2d")
     # Run calibration
     print("\n\nRunning 2d binocular calibration \n\n")
     method, result = calibrate_pl.calibrate_2d_binocular(
-        matched_data_binocular, frame_size=(video_vdim, video_hdim)
+        *matched_data_binocular, frame_size=(video_vdim, video_hdim)
     )
-    # Create mapper for gaze
-    cx, cy, n = result["args"]["params"]
-    mapper = calibrate_pl.calibrate_2d.make_map_function(cx, cy, n)
-
     # (5) Map gaze to video coordinates
     # Mapper takes two inputs: normalized pupil x and y position
-    print("\n\nRunning gaze mapper [left eye] \n\n")
-    pupil_x, pupil_y = pupil_arrays_binocular["norm_pos"].T
-    gaze_binocular = mapper([pupil_x, pupil_y])
+    print("\n\nRunning gaze mapper [binocular] \n\n")
+
+    # Create mapper for gaze
+    binocular_gaze_mapper = Binocular_Gaze_Mapper(result["args"]["params"], result["args"]["params_eye0"], result["args"]["params_eye1"])
+    gaze_binocular = binocular_gaze_mapper.map_batch(pupil_list_binocular)
     # Transpose output so time is the first dimension
-    gaze_binocular = np.vstack(gaze_binocular).T
+    # TODO: Make sure the format is consistent with the monocular  gaze
+    # gaze_binocular = np.vstack(gaze_binocular).T
 
     tag = "pupil_2d_binocular_v01"
     sname = os.path.join(output_path, "gaze_vedb", tag + "_{step}.npz")
