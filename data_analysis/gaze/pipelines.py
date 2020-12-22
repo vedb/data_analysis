@@ -392,6 +392,81 @@ def pupil_2d_binocular_v01(
     return gaze_binocular
 
 
+def pupil_2d_monocular_v02(
+    video_file_name,
+    session_folder,
+    sname=None,  # Base for each file?
+    tag="pupil_2d_monocular_v02",
+    output_path=None,
+    batch_size_pupil="auto",
+    progress_bar=tqdm.tqdm,
+    properties=None,
+):
+    """
+    Parameters
+    ----------
+    tag : A short label for the pipeline
+    session_folder : string
+        file path to session. Ultimately want to replace this with a session
+        object from the database.
+    sname : format string
+        must contain {step}; if provided, tag and output_path are ignored
+
+    Notes
+    -----
+    Ultimately, for saving files, we want the output of each step saved
+    along with the function and parameters that were used to generate it.
+
+    This is not the case now. Needs work.
+    """
+    # Deal with inputs
+    if output_path is None:
+        output_path = session_folder
+    if sname is None:
+        sname = os.path.join(output_path, "gaze_vedb", tag + "_" + video_file_name[:-4]  + "_{step}.npz")
+    fdir, _ = os.path.split(sname)
+    if not os.path.exists(fdir):
+        print("creating", fdir)
+        os.makedirs(fdir)
+    # (0) Get session
+    # ses = vedb_store.Session(folder=session_folder)
+    # (1) Pupil detection (L, R)
+    fn_pupil = pupil_detection_pl.plabs_detect_pupil
+
+    pupil_file_left = sname.format(step="pupilpos_left")
+    if os.path.exists(pupil_file_left):
+        print("Loading pupils left")
+        pupil_arrays_left = {}
+        dat = np.load(pupil_file_left, allow_pickle=True)
+        for k in dat.keys():
+            pupil_arrays_left[k] = dat[k]
+        pupil_list_left = gaze_utils.arraydict_to_dictlist(pupil_arrays_left)
+        print(pupil_list_left[0].keys())
+        print("found pupil file for: ", pupil_file_left, "\n\n")
+    else:
+        # Get eye files (Left eye)
+        eye_left_video_file = session_folder + video_file_name
+        inputs_pupil_left = dict(
+            fpaths=dict(eye_video=eye_left_video_file,),
+            variable_names=None,
+        )
+        print("\n\nRunning pupil detection for the left eye\n\n")
+        # Run pupil detection
+        pupil_list_left = vmp.utils.batch_run(
+            fn_pupil,
+            inputs_pupil_left,
+            batch_size=batch_size_pupil,
+            batch_combine_fn=vmp.utils.list_reduce,
+            progress_bar=progress_bar,
+            id=1,  # left eye # FIX ME: OPTION HERE FOR R, L, or binocular
+            properties=properties,
+        )
+        # Get arrays instead of list of dicts
+        pupil_arrays_left = gaze_utils.dictlist_to_arraydict(pupil_list_left)
+        # Save pupil detection
+        pupil_file_left = sname.format(step="pupilpos_left")
+        np.savez(pupil_file_left, **pupil_arrays_left)
+        print("\n\nSaved left pupil data into:",pupil_file_left,"\n\n")
 
 
 
