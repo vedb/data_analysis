@@ -9,7 +9,7 @@ from pupil_recording_interface.externals.data_processing import (
 from pupil_recording_interface.externals import calibrate_2d
 
 
-def get_data(pupil_list, ref_list, mode="2d", min_calibration_confidence=0.7):
+def get_data(pupil_list, ref_list, mode="2d", min_calibration_confidence=0.5):
     """Returns extracted data for calibration and whether there is binocular data
 
     Parameters

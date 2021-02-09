@@ -1,0 +1,29 @@
+version: 0.0.1
+
+calibration:
+  pupil_detection: PL
+  eye: binocular
+  algorithm: 2D-PL
+
+visualization:
+  start_time: 
+    - 1
+    - 10
+  end_time: 
+    - 16
+    - 30
+  save_world_output: False
+  save_eye_output: True
+  world_scale: 0.25
+  eye_scale: 0.5
+  eye_fps_scale: 4
+  marker_size: 4
+  marker_color: cyan
+  eye_index : binocular
+
+
+directory:
+  session_directory: "/hdd01/kamran_sync/vedbcloud0/staging/"
+  gaze_directory:  "/hdd01/kamran_sync/vedbcloud0/processed/gaze_pilot/"
+  saving_directory: "/hdd01/kamran_sync/vedbcloud0/processed/visualization/"
+

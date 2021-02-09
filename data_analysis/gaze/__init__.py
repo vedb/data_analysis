@@ -5,4 +5,5 @@ from . import (
     calibrate_pl,
     calibrate_vedb,
     pipelines,
+    gaze_analysis,
 )

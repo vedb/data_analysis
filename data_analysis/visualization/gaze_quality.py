@@ -2,20 +2,24 @@ import matplotlib.pyplot as plt
 from matplotlib import cm
 import numpy as np
 import cv2
+import scipy.interpolate
+from scipy.stats import multivariate_normal
+import matplotlib.pyplot as plt
+import seaborn as sns
 
 
-def plot_gaze_accuracy(self, markerPosition, gazeDataFrame, gazeIndex):
+def plot_gaze_accuracy(reference_pos, gaze_pos, confidence):
     """"""
-    horizontal_pixels = 1280
-    vertical_pixels = 1024
-    horizontal_FOV = 92.5
-    vertical_FOV = 70.8
+    horizontal_pixels = 2048
+    vertical_pixels = 1536
+    horizontal_FOV = 110
+    vertical_FOV = 90
 
     ratio_x = horizontal_FOV / horizontal_pixels
     ratio_y = vertical_FOV / vertical_pixels
 
-    gaze_norm_x = gazeDataFrame.iloc[gazeIndex].norm_pos_x.values
-    gaze_norm_y = gazeDataFrame.iloc[gazeIndex].norm_pos_y.values
+    gaze_norm_x = gaze_pos[:,0]
+    gaze_norm_y = gaze_pos[:,1]
 
     gaze_pixel_x = gaze_norm_x * horizontal_pixels
     gaze_pixel_y = gaze_norm_y * vertical_pixels
@@ -87,6 +91,89 @@ def plot_gaze_accuracy(self, markerPosition, gazeDataFrame, gazeIndex):
     plt.show()
 
 
+def plot_gaze_accuracy_heatmap(marker, gaze_pos, confidence, file_name, reference_type="calibration"):
+    """"""
+    horizontal_pixels = 2048
+    vertical_pixels = 1536
+    horizontal_FOV = 110
+    vertical_FOV = 90
+    sns.set()
+
+    ratio_x = horizontal_FOV / horizontal_pixels
+    ratio_y = vertical_FOV / vertical_pixels
+
+    if confidence:
+        threshold = 0.6
+        valid_index = np.argwhere(np.asarray(confidence) > threshold)
+
+        gaze_norm_x = gaze_pos[valid_index, 0]
+        gaze_norm_y = gaze_pos[valid_index, 1]
+        marker_norm_x = marker[valid_index, 0]
+        marker_norm_y = marker[valid_index, 1]
+    else:
+        gaze_norm_x = gaze_pos[:, 0]
+        gaze_norm_y = gaze_pos[:, 1]
+        marker_norm_x = marker[:, 0]
+        marker_norm_y = marker[:, 1]
+
+
+    gaze_pixel_x = gaze_norm_x * horizontal_pixels
+    gaze_pixel_y = gaze_norm_y * vertical_pixels
+
+    marker_pixel_x = marker_norm_x * horizontal_pixels
+    marker_pixel_y = marker_norm_y * vertical_pixels
+
+    print("gazeX shape = ", gaze_pixel_x.shape)
+    print("gazeY shape = ", gaze_pixel_y.shape)
+
+    x = gaze_pixel_x
+    y = gaze_pixel_y
+    xy = np.column_stack([x.flat, y.flat])  # Create a (N, 2) array of (x, y) pairs.
+
+    colors = np.power(np.power(marker_pixel_x - gaze_pixel_x, 2) + np.power(marker_pixel_y - gaze_pixel_y, 2), 0.5)
+    z = colors
+
+    azimuthRange = (0, 2048)
+    elevationRange = (0, 1536)
+    np.random.seed(0)
+
+    # plt.scatter(x, y)
+    # plt.savefig('scatterplot.png', dpi=300)
+
+    # plt.tricontourf(x, y, z)
+    # plt.savefig('tricontourf.png', dpi=300)
+
+    # Interpolate and generate heatmap:
+    #grid_x, grid_y = np.mgrid[x.min():x.max():50j, y.min():y.max():50j]
+    # grid_x, grid_y = np.mgrid[0:10:1000j, 0:10:1000j]
+    for method in ['linear']:  # , 'nearest','cubic'] :
+        plt.figure(figsize=(10, 8))
+        #grid_z = scipy.interpolate.griddata(xy, z, (grid_x, grid_y), method='linear')
+        # [pcolormesh with missing values?](https://stackoverflow.com/a/31687006/395857)
+        import numpy.ma as ma
+        #plt.pcolormesh(grid_x, grid_y, grid_z, cmap='YlOrRd', vmin=0, vmax=100)# ma.masked_invalid(grid_z)
+        #plt.plot(marker_pixel_x, marker_pixel_y, 'or', markersize=6, alpha=0.8, label='marker')
+        plt.plot(gaze_pixel_x, gaze_pixel_y, 'xc', markersize=6, alpha=0.6, label='gaze')
+
+        plt.scatter(marker_pixel_x, marker_pixel_y, edgecolors='face', c=colors, s=50, cmap='YlOrRd', alpha=0.9, vmin=0, vmax=400)
+        cbar = plt.colorbar()
+        # cbar.ax.set_yticklabels(['0','1','2','>3'])
+        cbar.set_label('Error (pixels)', fontsize=12, rotation=90)
+
+        plt.title('Gaze Accuracy [{0}] C>{1}'.format(reference_type, threshold))
+        plt.xlim(azimuthRange)
+        plt.ylim(elevationRange)
+        plt.legend(fontsize=10)
+        # plt.colorbar()
+        plt.grid(True)
+        plt.xlabel('azimuth (pixels)', fontsize=14)
+        plt.ylabel('elevation (pixels)', fontsize=14)
+        plt.axes().set_aspect('equal')
+        plt.savefig(file_name, dpi=200)
+        #plt.show()
+        plt.close()
+
+
 def plot_calibration(point_mapper,):
     fig, ax = plt.subplots(1, 2, figsize=(8, 4))
     ax[0].imshow(eye_video[0])
@@ -122,3 +209,6 @@ def plot_calibration(point_mapper,):
 
     # ax[1].set_ylim([vvdim, 0])
     # ax[1].set_xlim([0, vhdim])
+
+def plot_pupil_condifence_BP(right_pupil, left_pupil, sessions):
+    return True
