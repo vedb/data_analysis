@@ -48,7 +48,7 @@ def show_world_v01(
     start_time = param_dict['visualization']['start_time']
     end_time = param_dict['visualization']['end_time']
     save_video = param_dict['visualization']['save_world_output']
-    scale = param_dict['visualization']['scale']
+    world_scale = param_dict['visualization']['world_scale']
 
     gaze_calibration_tag = param_dict['calibration']['pupil_detection'] + '_' +\
           param_dict['calibration']['eye'] + '_' +\
@@ -114,13 +114,13 @@ def show_world_v01(
         print(key, value)
     reference_timestamps = reference_arrays['timestamp']
 
-    frame_height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT) * scale)
-    frame_width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH) * scale)
+    frame_height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT) * world_scale)
+    frame_width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH) * world_scale)
     video_size = (frame_width, frame_height)
     print("frame size:", video_size)
     print("First Frame = %d" % start_index)
     print("Last Frame = %d" % end_index)
-    print("scale[x,y] = ", scale)
+    print("scale[x,y] = ", world_scale)
 
     # Instantiate the video recorder in order to store the processed images to an output video
     if save_video:
@@ -134,7 +134,7 @@ def show_world_v01(
 
         img = vid.get_data(i)
         img[:, :, [0, 2]] = img[:, :, [2, 0]]
-        img = cv2.resize(img, None, fx=scale, fy=scale)
+        img = cv2.resize(img, None, fx=world_scale, fy=world_scale)
         #gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
         gaze_index = np.argmin(np.abs((gaze_timestamp - world_time_stamp[i]).astype(float)))
@@ -148,8 +148,8 @@ def show_world_v01(
 
         if (min(np.abs(reference_timestamps - world_time_stamp[i]))<0.03):
             reference_index = np.argmin(np.abs(reference_timestamps - world_time_stamp[i]))
-            ref_pixel_x = int(reference_arrays['location'][reference_index, 0] * scale)
-            ref_pixel_y = int(reference_arrays['location'][reference_index, 1] * scale)
+            ref_pixel_x = int(reference_arrays['location'][reference_index, 0] * world_scale)
+            ref_pixel_y = int(reference_arrays['location'][reference_index, 1] * world_scale)
             img = cv2.circle(img, (ref_pixel_x, ref_pixel_y), 8, (200, 25, 205), 2)
         # Todo: Create a separate function for adding text info on the frame
         # font
@@ -354,6 +354,106 @@ def show_gaze_accuracy_v01(
 
     return
 
+
+def show_eye_confidence_v01(
+    session_directory,
+    session_folder,
+    param_dict,
+    string_name = None,
+    world_scale=1,
+    progress_bar=tqdm.tqdm,
+):
+    import matplotlib.pyplot as plt
+    print(param_dict.keys())
+    # Todo: Read length of the session id from parameters?
+    session_id = session_folder[-19:] + '/'
+    output_path = param_dict['directory']['saving_directory'] + session_id
+    gaze_path = param_dict['directory']['gaze_directory'] + session_id
+    # Deal with inputs
+    if output_path is None:
+        #output_path = session_folder
+        raise ValueError("parameters' yaml file doesn't have valid saving_directory!")
+    else:
+        print("saving results to: ", output_path)
+
+    start_time = param_dict['visualization']['start_time']
+    end_time = param_dict['visualization']['end_time']
+    save_video = param_dict['visualization']['save_eye_output']
+    scale = param_dict['visualization']['eye_scale']
+    eye_index_dict = {"right": [0], "left": [1], "binocular": [0, 1]}
+    eye_string = {1: "right", 0: "left"}
+    eye_index = eye_index_dict[param_dict['visualization']['eye_index']]
+
+    gaze_calibration_tag = param_dict['calibration']['pupil_detection'] + '_' +\
+          param_dict['calibration']['eye'] + '_' +\
+          param_dict['calibration']['algorithm']
+
+    tag = param_dict['calibration']['pupil_detection'] + '_' +\
+          param_dict['calibration']['eye'] + '_' +\
+          param_dict['calibration']['algorithm']
+    print('tag : ', tag)
+    pupil_tag = param_dict['calibration']['pupil_detection'] + '_' +\
+          param_dict['calibration']['eye'] + '_' +\
+          param_dict['calibration']['algorithm']
+
+    # Todo: Read this from session info
+    skip_frame = int(param_dict['visualization']['eye_fps_scale'])
+    print("Skip Frame", skip_frame)
+    fps = int(120/skip_frame)
+    print('tag : ', tag)
+    if string_name is None:
+        string_name = os.path.join(gaze_path, pupil_tag + "_{step}.npz")
+    print("file_name", string_name)
+    if not os.path.exists(output_path):
+        print("creating", output_path)
+        os.makedirs(output_path)
+    # (0) Get session
+    session = vedb_store.Session(folder=session_folder)
+    # (1) Read Start and End Indexes
+    start_index = (start_time[0] * 60 + start_time[1]) * fps
+    end_index = (end_time[0] * 60 + end_time[1]) * fps
+    # (2) Read Gaze File
+    gaze_file = session_folder + '/' + gaze_calibration_tag + '_gaze.npz'
+
+    if os.path.exists(gaze_file):
+        print("Loading gaze data")
+        gaze_arrays = {}
+        dat = np.load(gaze_file, allow_pickle=True)
+        for k in dat.keys():
+            gaze_arrays[k] = dat[k]
+        gaze_list = gaze_utils.arraydict_to_dictlist(gaze_arrays)
+    else:
+        raise ValueError("No valid gaze file was found!", gaze_file)
+    for key, value in gaze_list[0].items():
+        print(key, value)
+
+    confidence = []
+    for i in range(len(gaze_list)):
+        confidence.append(gaze_list[i]['gaze_binocular']['confidence'])
+    plt.figure(figsize=(12, 10))
+
+    # plt.boxplot(diff_r_az, notch=True, showfliers=False)
+    boxprops = dict(linestyle='-', linewidth=3)
+    whiskerprops = dict(linestyle='-', linewidth=3)
+    capprops = dict(linestyle='-', linewidth=3)
+    plt.boxplot([confidence], boxprops=boxprops, whiskerprops=whiskerprops,
+                capprops=capprops, notch = True, showfliers = False)
+    plt.title("Gaze Confidence", fontsize=16)
+    plt.ylabel("Confidence", fontsize=16)
+    # plt.xticks([1, 2, 3, 4], ["azimuth_right", "elevation_right", "azimuth_left", "elevation_left"], fontsize=18)
+    plt.xticks([1], ["gaze_2D"], fontsize=18)
+    plt.yticks(fontsize=18)
+    plt.grid(True)
+    plt.ylim(0, 1.1)
+    plt.tight_layout()
+    file_name = os.path.join(output_path, gaze_calibration_tag + "_{step}.png")
+    file_name.format(step="gaze_confidence")
+    print(file_name)
+    plt.savefig(file_name, dpi=150, transparent=False)
+    #plt.show()
+    plt.close()
+
+    return True
 
 def show_eye_v01(
     session_directory,

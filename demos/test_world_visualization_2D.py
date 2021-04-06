@@ -23,7 +23,7 @@ if __name__ == "__main__":
         result = False
         print("running analysis for:", session_folder)
         #try:
-        if ("2020_10_19_00_23_14" in session_folder):
+        if ("2021_02_01_12_35_10" in session_folder):
             result = visualization.pipelines.show_world_v01(
                 session_directory, session_folder , param_dict)
         #except:
