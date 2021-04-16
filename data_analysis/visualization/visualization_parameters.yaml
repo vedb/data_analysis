@@ -7,11 +7,11 @@ calibration:
 
 visualization:
   start_time: 
-    - 7
-    - 30
-  end_time: 
-    - 9
     - 0
+    - 0
+  end_time: 
+    - 3
+    - 30
   save_world_output: True
   save_eye_output: True
   world_scale: 0.25

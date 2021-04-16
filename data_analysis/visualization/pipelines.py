@@ -38,6 +38,7 @@ def show_world_v01(
     # Todo: Read length of the session id from parameters?
     session_id = session_folder[-19:] + '/'
     output_path =   param_dict['directory']['saving_directory'] + session_id
+    processed_path = param_dict['directory']['gaze_directory'] + session_id
     # Deal with inputs
     if output_path is None:
         #output_path = session_folder
@@ -63,7 +64,6 @@ def show_world_v01(
     # Todo: Read this from session info
     fps = 30
     print('tag : ', tag)
-    print(type(tag))
     string_name = os.path.join(output_path, tag + "_{step}.npz")
     print("file_name", string_name)
     if not os.path.exists(output_path):
@@ -75,7 +75,7 @@ def show_world_v01(
     start_index = (start_time[0] * 60 + start_time[1]) * fps
     end_index = (end_time[0] * 60 + end_time[1]) * fps
     # (2) Read Gaze File
-    gaze_file = session_folder + '/' + gaze_calibration_tag + '_gaze.npz'
+    gaze_file = processed_path + '/' + gaze_calibration_tag + '_gaze.npz'
 
     if os.path.exists(gaze_file):
         print("Loading gaze data")
@@ -99,7 +99,7 @@ def show_world_v01(
     gaze_timestamp = []
     for my_index in range(len(gaze_list)):
         gaze_timestamp.append(gaze_list[my_index]['gaze_binocular']['timestamp'])
-    reference_file = session_folder + '/' + gaze_calibration_tag + '_calibration_ref_pos.npz'
+    reference_file = processed_path + '/' + gaze_calibration_tag + '_calibration_ref_pos.npz'
 
     if os.path.exists(reference_file):
         print("Loading reference data")
