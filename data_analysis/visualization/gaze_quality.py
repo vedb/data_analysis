@@ -111,6 +111,7 @@ def plot_gaze_accuracy_heatmap(marker, gaze_pos, confidence, file_name, referenc
         marker_norm_x = marker[valid_index, 0]
         marker_norm_y = marker[valid_index, 1]
     else:
+        threshold = None
         gaze_norm_x = gaze_pos[:, 0]
         gaze_norm_y = gaze_pos[:, 1]
         marker_norm_x = marker[:, 0]
@@ -120,11 +121,21 @@ def plot_gaze_accuracy_heatmap(marker, gaze_pos, confidence, file_name, referenc
     gaze_pixel_x = gaze_norm_x * horizontal_pixels
     gaze_pixel_y = gaze_norm_y * vertical_pixels
 
-    marker_pixel_x = marker_norm_x * horizontal_pixels
-    marker_pixel_y = marker_norm_y * vertical_pixels
+    if reference_type == 'Calibration':
+        marker_pixel_x = marker_norm_x # horizontal_pixels
+        marker_pixel_y = marker_norm_y # vertical_pixels
+    else:
+        marker_pixel_x = marker_norm_x * 2# horizontal_pixels
+        marker_pixel_y = marker_norm_y * 4# vertical_pixels
 
-    print("gazeX shape = ", gaze_pixel_x.shape)
-    print("gazeY shape = ", gaze_pixel_y.shape)
+    gaze_pixel_x = gaze_pixel_x * (110/2048) - 55
+    gaze_pixel_y = gaze_pixel_y * (90 / 1536) - 45
+
+    marker_pixel_x = marker_pixel_x *  (110/2048) - 55
+    marker_pixel_y = marker_pixel_y *  (90/1536) - 45
+
+    print("gaze shape = ", gaze_pixel_x.shape, gaze_pixel_y.shape)
+    print("marker shape = ", marker_pixel_x.shape, marker_pixel_y.shape)
 
     x = gaze_pixel_x
     y = gaze_pixel_y
@@ -133,8 +144,8 @@ def plot_gaze_accuracy_heatmap(marker, gaze_pos, confidence, file_name, referenc
     colors = np.power(np.power(marker_pixel_x - gaze_pixel_x, 2) + np.power(marker_pixel_y - gaze_pixel_y, 2), 0.5)
     z = colors
 
-    azimuthRange = (0, 2048)
-    elevationRange = (0, 1536)
+    azimuthRange = (-60,60)#(0, 2048)
+    elevationRange = (-45,45)# (0, 1536)
     np.random.seed(0)
 
     # plt.scatter(x, y)
@@ -153,9 +164,9 @@ def plot_gaze_accuracy_heatmap(marker, gaze_pos, confidence, file_name, referenc
         import numpy.ma as ma
         #plt.pcolormesh(grid_x, grid_y, grid_z, cmap='YlOrRd', vmin=0, vmax=100)# ma.masked_invalid(grid_z)
         #plt.plot(marker_pixel_x, marker_pixel_y, 'or', markersize=6, alpha=0.8, label='marker')
-        plt.plot(gaze_pixel_x, gaze_pixel_y, 'xc', markersize=6, alpha=0.6, label='gaze')
+        # plt.plot(gaze_pixel_x, gaze_pixel_y, 'xc', markersize=6, alpha=0.4, label='gaze')
 
-        plt.scatter(marker_pixel_x, marker_pixel_y, edgecolors='face', c=colors, s=50, cmap='YlOrRd', alpha=0.9, vmin=0, vmax=400)
+        plt.scatter(marker_pixel_x, marker_pixel_y, edgecolors='face', c=colors, s=50, cmap='YlOrRd', alpha=0.9, vmin=0, vmax=15)
         cbar = plt.colorbar()
         # cbar.ax.set_yticklabels(['0','1','2','>3'])
         cbar.set_label('Error (pixels)', fontsize=12, rotation=90)

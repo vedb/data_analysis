@@ -10,8 +10,8 @@ visualization:
     - 0
     - 0
   end_time: 
-    - 3
-    - 30
+    - 4
+    - 0
   save_world_output: True
   save_eye_output: True
   world_scale: 0.25
@@ -26,4 +26,4 @@ directory:
   session_directory: "/hdd01/kamran_sync/vedbcloud0/staging/"
   gaze_directory:  "/hdd01/kamran_sync/vedbcloud0/processed/gaze_pilot/"
   saving_directory: "/hdd01/kamran_sync/vedbcloud0/processed/visualization/"
-
+  cumulative_gaze_file: "/home/kamran/Desktop/gaze_accuracy.npz"
