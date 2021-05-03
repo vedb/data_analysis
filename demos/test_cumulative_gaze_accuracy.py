@@ -6,7 +6,7 @@ import numpy as np
 import yaml
 from data_analysis import gaze
 from data_analysis import visualization
-from data_analysis.visualization.gaze_quality import plot_gaze_accuracy_heatmap
+from data_analysis.visualization.gaze_quality import plot_gaze_accuracy_heatmap, plot_gaze_accuracy_contour
 # Directory for the recording sessions
 parameters_fpath = "/home/kamran/Code/data_analysis/data_analysis/visualization/visualization_parameters.yaml"
 def parse_pipeline_parameters(parameters_fpath):
@@ -46,5 +46,7 @@ if __name__ == "__main__":
     save_directory = "/hdd01/kamran_sync/lab/students/kamran/Projects/Results/"
     marker_type = "Calibration"
     plot_gaze_accuracy_heatmap(calibration_points, calibration_gaze,None, file_name=save_directory+"calibration_accuracy.png",reference_type=marker_type)
+    plot_gaze_accuracy_contour(calibration_points, calibration_gaze,None, file_name=save_directory+"calibration_accuracy_contour.png",reference_type=marker_type)
     marker_type = "Validation"
     plot_gaze_accuracy_heatmap(validation_points, validation_gaze,None, file_name=save_directory+"validation_accuracy.png",reference_type=marker_type)
+    plot_gaze_accuracy_contour(validation_points, validation_gaze, None, file_name=save_directory + "validation_accuracy_contour.png", reference_type=marker_type)
