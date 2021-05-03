@@ -24,13 +24,24 @@ if __name__ == "__main__":
 #    sessions = glob.glob(session_directory + "*")
 
     sessions = [
+                "/hdd01/kamran_sync/vedbcloud0/raw/2020_11_06_13_38_53",
+                "/hdd01/kamran_sync/vedbcloud0/raw/2020_10_11_13_31_08",
+                "/hdd01/kamran_sync/vedbcloud0/raw/2020_10_10_15_06_26",
+                "/hdd01/kamran_sync/vedbcloud0/raw/2020_09_27_14_47_51",
+                "/hdd01/kamran_sync/vedbcloud0/raw/2020_09_26_13_01_11",
+                "/hdd01/kamran_sync/vedbcloud0/raw/2020_09_26_11_03_22",
+                # "/hdd01/kamran_sync/vedbcloud0/raw/2020_09_23_16_55_17", # Corrupt World Video
+                "/hdd01/kamran_sync/vedbcloud0/raw/2020_09_23_16_46_05",
+                "/hdd01/kamran_sync/vedbcloud0/raw/2020_09_23_09_41_53",
+                "/hdd01/kamran_sync/vedbcloud0/raw/2020_09_20_14_00_00",
+
                 # "/hdd01/kamran_sync/vedbcloud0/staging/2021_03_04_16_16_45",
                 # "/hdd01/kamran_sync/vedbcloud0/staging/2021_03_09_11_33_49",
                 # "/hdd01/kamran_sync/vedbcloud0/staging/2021_03_14_14_13_55",
 
-                "/hdd01/kamran_sync/vedbcloud0/staging/2021_03_04_17_01_45",
-                "/hdd01/kamran_sync/vedbcloud0/staging/2021_03_04_22_37_35",
-                "/hdd01/kamran_sync/vedbcloud0/staging/2021_03_14_14_02_16",
+                # "/hdd01/kamran_sync/vedbcloud0/staging/2021_03_04_17_01_45",
+                # "/hdd01/kamran_sync/vedbcloud0/staging/2021_03_04_22_37_35",
+                # "/hdd01/kamran_sync/vedbcloud0/staging/2021_03_14_14_02_16",
 
 
                 # "/hdd01/kamran_sync/vedbcloud0/staging/2021_02_23_14_14_57",

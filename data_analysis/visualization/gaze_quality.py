@@ -90,6 +90,106 @@ def plot_gaze_accuracy(reference_pos, gaze_pos, confidence):
     # plt.savefig(dataPath + '/offline_data/gaze_accuracy_'+str(start_seconds)+'_'+ str(end_seconds)+'.png', dpi = 200 )
     plt.show()
 
+def plot_gaze_accuracy_contour(marker, gaze_pos, confidence, file_name, reference_type="calibration"):
+    """"""
+    import numpy.ma as ma
+    horizontal_pixels = 2048
+    vertical_pixels = 1536
+    horizontal_FOV = 110
+    vertical_FOV = 90
+    sns.set()
+
+    ratio_x = horizontal_FOV / horizontal_pixels
+    ratio_y = vertical_FOV / vertical_pixels
+
+    if confidence:
+        threshold = 0.6
+        valid_index = np.argwhere(np.asarray(confidence) > threshold)
+
+        gaze_norm_x = gaze_pos[valid_index, 0]
+        gaze_norm_y = gaze_pos[valid_index, 1]
+        marker_norm_x = marker[valid_index, 0]
+        marker_norm_y = marker[valid_index, 1]
+    else:
+        threshold = None
+        gaze_norm_x = gaze_pos[:, 0]
+        gaze_norm_y = gaze_pos[:, 1]
+        marker_norm_x = marker[:, 0]
+        marker_norm_y = marker[:, 1]
+
+
+    gaze_pixel_x = gaze_norm_x * horizontal_pixels
+    gaze_pixel_y = gaze_norm_y * vertical_pixels
+
+    if reference_type == 'Calibration':
+        marker_pixel_x = marker_norm_x # horizontal_pixels
+        marker_pixel_y = marker_norm_y # vertical_pixels
+    else:
+        marker_pixel_x = marker_norm_x * 2# horizontal_pixels
+        marker_pixel_y = marker_norm_y * 4# vertical_pixels
+
+    gaze_pixel_x = gaze_pixel_x * (110/2048) - 55
+    gaze_pixel_y = gaze_pixel_y * (90 / 1536) - 45
+
+    marker_pixel_x = marker_pixel_x *  (110/2048) - 55
+    marker_pixel_y = marker_pixel_y *  (90/1536) - 45
+
+    print("gaze shape = ", gaze_pixel_x.shape, gaze_pixel_y.shape)
+    print("marker shape = ", marker_pixel_x.shape, marker_pixel_y.shape)
+
+    x = gaze_pixel_x
+    y = gaze_pixel_y
+    xy = np.column_stack([x.flat, y.flat])  # Create a (N, 2) array of (x, y) pairs.
+
+    colors = np.power(np.power(marker_pixel_x - gaze_pixel_x, 2) + np.power(marker_pixel_y - gaze_pixel_y, 2), 0.5)
+    z = colors
+
+    azimuthRange = (-60,60)#(0, 2048)
+    elevationRange = (-45,45)# (0, 1536)
+    np.random.seed(0)
+
+    # plt.scatter(x, y)
+    # plt.savefig('scatterplot.png', dpi=300)
+
+    # plt.tricontourf(x, y, z)
+    # plt.savefig('tricontourf.png', dpi=300)
+
+    # Interpolate and generate heatmap:
+    #grid_x, grid_y = np.mgrid[x.min():x.max():50j, y.min():y.max():50j]
+    # grid_x, grid_y = np.mgrid[0:10:1000j, 0:10:1000j]
+    x = marker_pixel_x
+    y = marker_pixel_y
+    xy = np.column_stack([x.flat, y.flat])  # Create a (N, 2) array of (x, y) pairs.
+    grid_x, grid_y = np.mgrid[x.min():x.max():200j, y.min():y.max():200j]
+
+    for method in ['linear']:  # , 'nearest','cubic'] :
+        plt.figure(figsize=(10, 10))
+        # CS = plt.contour(marker_pixel_x, marker_pixel_y, z)
+        # plt.clabel(CS, inline=1, fontsize=10)
+        #plt.title('Simplest default with labels')
+        grid_z = scipy.interpolate.griddata(xy, z, (grid_x, grid_y), method=method)
+        print(len(grid_z))
+        plt.pcolormesh(grid_x, grid_y, grid_z, cmap='YlOrRd', vmin=0, vmax=10) # ma.masked_invalid()
+        # plt.scatter(marker_pixel_x, marker_pixel_y, edgecolors='face', c=colors, s=50, cmap='YlOrRd', alpha=0.9, vmin=0,
+        #             vmax=15)
+        # CS = plt.contour(grid_x, grid_y, grid_z)
+        # plt.clabel(CS, inline=1, fontsize=10)
+        cbar = plt.colorbar()
+        # cbar.ax.set_yticklabels(['0','1','2','>3'])
+        cbar.set_label('Error (pixels)', fontsize=12, rotation=90)
+
+        plt.title('Gaze Accuracy [{0}] C>{1}'.format(reference_type, threshold))
+        plt.xlim(azimuthRange)
+        plt.ylim(elevationRange)
+        # plt.legend(fontsize=10)
+        # plt.colorbar()
+        plt.grid(True)
+        plt.xlabel('azimuth (pixels)', fontsize=14)
+        plt.ylabel('elevation (pixels)', fontsize=14)
+        plt.axes().set_aspect('equal')
+        plt.savefig(file_name, dpi=200)
+        #plt.show()
+        plt.close()
 
 def plot_gaze_accuracy_heatmap(marker, gaze_pos, confidence, file_name, reference_type="calibration"):
     """"""
@@ -158,15 +258,12 @@ def plot_gaze_accuracy_heatmap(marker, gaze_pos, confidence, file_name, referenc
     #grid_x, grid_y = np.mgrid[x.min():x.max():50j, y.min():y.max():50j]
     # grid_x, grid_y = np.mgrid[0:10:1000j, 0:10:1000j]
     for method in ['linear']:  # , 'nearest','cubic'] :
-        plt.figure(figsize=(10, 8))
-        #grid_z = scipy.interpolate.griddata(xy, z, (grid_x, grid_y), method='linear')
+        plt.figure(figsize=(10, 10))
         # [pcolormesh with missing values?](https://stackoverflow.com/a/31687006/395857)
-        import numpy.ma as ma
-        #plt.pcolormesh(grid_x, grid_y, grid_z, cmap='YlOrRd', vmin=0, vmax=100)# ma.masked_invalid(grid_z)
         #plt.plot(marker_pixel_x, marker_pixel_y, 'or', markersize=6, alpha=0.8, label='marker')
         # plt.plot(gaze_pixel_x, gaze_pixel_y, 'xc', markersize=6, alpha=0.4, label='gaze')
 
-        plt.scatter(marker_pixel_x, marker_pixel_y, edgecolors='face', c=colors, s=50, cmap='YlOrRd', alpha=0.9, vmin=0, vmax=15)
+        plt.scatter(marker_pixel_x, marker_pixel_y, edgecolors='face', c=colors, s=250, cmap='YlOrRd', alpha=0.1, vmin=0, vmax=15)
         cbar = plt.colorbar()
         # cbar.ax.set_yticklabels(['0','1','2','>3'])
         cbar.set_label('Error (pixels)', fontsize=12, rotation=90)
@@ -174,7 +271,7 @@ def plot_gaze_accuracy_heatmap(marker, gaze_pos, confidence, file_name, referenc
         plt.title('Gaze Accuracy [{0}] C>{1}'.format(reference_type, threshold))
         plt.xlim(azimuthRange)
         plt.ylim(elevationRange)
-        plt.legend(fontsize=10)
+        # plt.legend(fontsize=10)
         # plt.colorbar()
         plt.grid(True)
         plt.xlabel('azimuth (pixels)', fontsize=14)
