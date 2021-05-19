@@ -24,16 +24,18 @@ if __name__ == "__main__":
 #    sessions = glob.glob(session_directory + "*")
 
     sessions = [
-                "/hdd01/kamran_sync/vedbcloud0/raw/2020_11_06_13_38_53",
-                "/hdd01/kamran_sync/vedbcloud0/raw/2020_10_11_13_31_08",
-                "/hdd01/kamran_sync/vedbcloud0/raw/2020_10_10_15_06_26",
-                "/hdd01/kamran_sync/vedbcloud0/raw/2020_09_27_14_47_51",
-                "/hdd01/kamran_sync/vedbcloud0/raw/2020_09_26_13_01_11",
-                "/hdd01/kamran_sync/vedbcloud0/raw/2020_09_26_11_03_22",
+                # "/home/kamran/temp_sync/vedbcloud0/staging/2021_04_11_09_26_11",
+                "/home/kamran/temp_sync/vedbcloud0/staging/2021_05_11_16_58_35",
+                # "/hdd01/kamran_sync/vedbcloud0/raw/2020_11_06_13_38_53",
+                # "/hdd01/kamran_sync/vedbcloud0/raw/2020_10_11_13_31_08",
+                # "/hdd01/kamran_sync/vedbcloud0/raw/2020_10_10_15_06_26",
+                # "/hdd01/kamran_sync/vedbcloud0/raw/2020_09_27_14_47_51",
+                # "/hdd01/kamran_sync/vedbcloud0/raw/2020_09_26_13_01_11",
+                # "/hdd01/kamran_sync/vedbcloud0/raw/2020_09_26_11_03_22",
                 # "/hdd01/kamran_sync/vedbcloud0/raw/2020_09_23_16_55_17", # Corrupt World Video
-                "/hdd01/kamran_sync/vedbcloud0/raw/2020_09_23_16_46_05",
-                "/hdd01/kamran_sync/vedbcloud0/raw/2020_09_23_09_41_53",
-                "/hdd01/kamran_sync/vedbcloud0/raw/2020_09_20_14_00_00",
+                # "/hdd01/kamran_sync/vedbcloud0/raw/2020_09_23_16_46_05",
+                # "/hdd01/kamran_sync/vedbcloud0/raw/2020_09_23_09_41_53",
+                # "/hdd01/kamran_sync/vedbcloud0/raw/2020_09_20_14_00_00",
 
                 # "/hdd01/kamran_sync/vedbcloud0/staging/2021_03_04_16_16_45",
                 # "/hdd01/kamran_sync/vedbcloud0/staging/2021_03_09_11_33_49",
@@ -96,24 +98,17 @@ if __name__ == "__main__":
                 # "/hdd01/kamran_sync/vedbcloud0/staging/2020_11_03_04_50_44",
                 ]
 
-                # "/hdd01/kamran_sync/vedbcloud0/staging/000",
-                # "/hdd01/kamran_sync/vedbcloud0/staging/2020_08_23_19_43_29",
-                # "/hdd01/kamran_sync/vedbcloud0/staging/2020_08_23_20_05_26",
-                # "/hdd01/kamran_sync/vedbcloud0/staging/2020_08_23_22_27_12",
-                # "/hdd01/kamran_sync/vedbcloud0/staging/2020_09_14_13_54_11",
-                # "/hdd01/kamran_sync/vedbcloud0/staging/2020_09_28_20_53_15",
-
     print("total number of sessions", len(sessions))
     # print("all sessions: ", sessions)
     for session_folder in sessions:
         result = False
         print("running analysis for:", session_folder)
         # if ("2020_10_15_12_05_24" in session_folder): #2020_10_15_12_05_24  #2020_10_19_00_23_14
-        try:
-            result = gaze.pipelines.pupil_2d_binocular_v01(
-                    session_folder, param_dict, batch_size_pupil=1000, batch_size_marker=100)
-        except:
-           print("Failed for session %s " % session_folder)
+        # try:
+        result = gaze.pipelines.pupil_2d_binocular_v01(
+                session_folder, param_dict, batch_size_pupil=500, batch_size_marker=100)
+        # except:
+        #    print("Failed for session %s " % session_folder)
         # else:
         #     print("skipped session: ", session_folder)
 

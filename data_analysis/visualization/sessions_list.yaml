@@ -1,186 +1,198 @@
 sessions:
-  '2021_03_14_14_13_55':
-    calibration: True
-    validation: True
-    calibration_start:
-      - [0,43]
-    calibration_end:
-      - [1,44]
-    validation_start:
-      - [1,49]
-    validation_end:
-      - [2,49]
+#  '2021_03_14_14_13_55':
+#    calibration: True
+#    validation: True
+#    calibration_start:
+#      - [0,43]
+#    calibration_end:
+#      - [1,44]
+#    validation_start:
+#      - [1,49]
+#    validation_end:
+#      - [2,49]
+#
+#  '2021_03_14_14_02_16':
+#    calibration: True
+#    validation: True
+#    calibration_start:
+#      - [1,23]
+#    calibration_end:
+#      - [2,40]
+#    validation_start:
+#      - [2,44]
+#    validation_end:
+#      - [3,36]
+#
+#  '2021_03_09_11_33_49':
+#    calibration: True
+#    validation: True
+#    calibration_start:
+#      - [0,18]
+#    calibration_end:
+#      - [1,23]
+#    validation_start:
+#      - [1,26]
+#    validation_end:
+#      - [2,26]
+#
+#  '2021_03_04_22_37_35':
+#    calibration: True
+#    validation: True
+#    calibration_start:
+#      - [0,20]
+#    calibration_end:
+#      - [1,11]
+#    validation_start:
+#      - [1,13]
+#    validation_end:
+#      - [2,03]
+#
+#  '2021_03_04_17_01_45':
+#    calibration: True
+#    validation: True
+#    calibration_start:
+#      - [0,45]
+#    calibration_end:
+#      - [1,25]
+#    validation_start:
+#      - [1,28]
+#    validation_end:
+#      - [2,13]
+#
+#  '2021_03_04_16_16_45':
+#    calibration: True
+#    validation: True
+#    calibration_start:
+#      - [0,20]
+#    calibration_end:
+#      - [1,6]
+#    validation_start:
+#      - [1,22]
+#    validation_end:
+#      - [2,8]
+#
+#  '2021_02_25_16_28_15':
+#    calibration: True
+#    validation: True
+#    calibration_start:
+#      - [0,50]
+#    calibration_end:
+#      - [2,20]
+#    validation_start:
+#      - [3,50]
+#    validation_end:
+#      - [5,20]
+#
+#  '2021_02_23_14_14_57':
+#    calibration: True
+#    validation: False
+#    calibration_start:
+#      - [0,20]
+#    calibration_end:
+#      - [1,56]
+#
+#  '2021_02_08_16_24_36':
+#    calibration: True
+#    validation: True
+#    calibration_start:
+#      - [0,14]
+#    calibration_end:
+#      - [1,16]
+#    validation_start:
+#      - [1,18]
+#    validation_end:
+#      - [2,20]
+#
+#  '2021_02_04_18_36_36':
+#    calibration: True
+#    validation: True
+#    calibration_start:
+#      - [0,52]
+#    calibration_end:
+#      - [2,3]
+#    validation_start:
+#      - [2,7]
+#    validation_end:
+#      - [3,28]
+#
+#  '2021_02_04_17_01_18':
+#    calibration: True
+#    validation: True
+#    calibration_start:
+#      - [0,24]
+#    calibration_end:
+#      - [1,3]
+#    validation_start:
+#      - [1,6]
+#    validation_end:
+#      - [1,41]
+#
+#  '2021_02_04_16_42_40':
+#    calibration: True
+#    validation: True
+#    calibration_start:
+#      - [0,49]
+#    calibration_end:
+#      - [1,31]
+#    validation_start:
+#      - [1,32]
+#    validation_end:
+#      - [2,12]
+#
+#  '2021_02_01_12_35_10':
+#    calibration: True
+#    validation: False
+#    calibration_start:
+#      - [7,31]
+#    calibration_end:
+#      - [8,42]
+#
+#  '2020_10_19_00_23_14':
+#    calibration: True
+#    validation: True
+#    calibration_start:
+#      - [0,55]
+#    calibration_end:
+#      - [5,12]
+#    validation_start:
+#      - [5,50]
+#    validation_end:
+#      - [7,15]
+#
+#  # 2021_01_28_12_18_46 # Out of focus world camera
+#
+#  '2020_10_15_12_21_33':
+#    calibration: True
+#    validation: True
+#    calibration_start:
+#      - [0,46]
+#    calibration_end:
+#      - [2,50]
+#    validation_start:
+#      - [2,56]
+#    validation_end:
+#      - [4,30]
+#
+#  '2020_09_28_20_53_15':
+#    calibration: True
+#    validation: True
+#    calibration_start:
+#      - [0,57]
+#    calibration_end:
+#      - [2,50]
+#    validation_start:
+#      - [2,56]
+#    validation_end:
+#      - [3,15]
 
-  '2021_03_14_14_02_16':
-    calibration: True
-    validation: True
-    calibration_start:
-      - [1,23]
-    calibration_end:
-      - [2,40]
-    validation_start:
-      - [2,44]
-    validation_end:
-      - [3,36]
-
-  '2021_03_09_11_33_49':
-    calibration: True
-    validation: True
-    calibration_start:
-      - [0,18]
-    calibration_end:
-      - [1,23]
-    validation_start:
-      - [1,26]
-    validation_end:
-      - [2,26]
-
-  '2021_03_04_22_37_35':
-    calibration: True
-    validation: True
-    calibration_start:
-      - [0,20]
-    calibration_end:
-      - [1,11]
-    validation_start:
-      - [1,13]
-    validation_end:
-      - [2,03]
-
-  '2021_03_04_17_01_45':
-    calibration: True
-    validation: True
-    calibration_start:
-      - [0,45]
-    calibration_end:
-      - [1,25]
-    validation_start:
-      - [1,28]
-    validation_end:
-      - [2,13]
-
-  '2021_03_04_16_16_45':
-    calibration: True
-    validation: True
-    calibration_start:
-      - [0,20]
-    calibration_end:
-      - [1,6]
-    validation_start:
-      - [1,22]
-    validation_end:
-      - [2,8]
-
-  '2021_02_25_16_28_15':
-    calibration: True
-    validation: True
-    calibration_start:
-      - [0,50]
-    calibration_end:
-      - [2,20]
-    validation_start:
-      - [3,50]
-    validation_end:
-      - [5,20]
-
-  '2021_02_23_14_14_57':
-    calibration: True
-    validation: False
-    calibration_start:
-      - [0,20]
-    calibration_end:
-      - [1,56]
-
-  '2021_02_08_16_24_36':
-    calibration: True
-    validation: True
-    calibration_start:
-      - [0,14]
-    calibration_end:
-      - [1,16]
-    validation_start:
-      - [1,18]
-    validation_end:
-      - [2,20]
-
-  '2021_02_04_18_36_36':
-    calibration: True
-    validation: True
-    calibration_start:
-      - [0,52]
-    calibration_end:
-      - [2,3]
-    validation_start:
-      - [2,7]
-    validation_end:
-      - [3,28]
-
-  '2021_02_04_17_01_18':
-    calibration: True
-    validation: True
-    calibration_start:
-      - [0,24]
-    calibration_end:
-      - [1,3]
-    validation_start:
-      - [1,6]
-    validation_end:
-      - [1,41]
-
-  '2021_02_04_16_42_40':
-    calibration: True
-    validation: True
-    calibration_start:
-      - [0,49]
-    calibration_end:
-      - [1,31]
-    validation_start:
-      - [1,32]
-    validation_end:
-      - [2,12]
-
-  '2021_02_01_12_35_10':
-    calibration: True
-    validation: False
-    calibration_start:
-      - [7,31]
-    calibration_end:
-      - [8,42]
-
-  '2020_10_19_00_23_14':
-    calibration: True
-    validation: True
-    calibration_start:
-      - [0,55]
-    calibration_end:
-      - [5,12]
-    validation_start:
-      - [5,50]
-    validation_end:
-      - [7,15]
-
-  # 2021_01_28_12_18_46 # Out of focus world camera
-
-  '2020_10_15_12_21_33':
-    calibration: True
-    validation: True
-    calibration_start:
-      - [0,46]
-    calibration_end:
-      - [2,50]
-    validation_start:
-      - [2,56]
-    validation_end:
-      - [4,30]
-
-  '2020_09_28_20_53_15':
-    calibration: True
-    validation: True
-    calibration_start:
-      - [0,57]
-    calibration_end:
-      - [2,50]
-    validation_start:
-      - [2,56]
-    validation_end:
-      - [3,15]
+    '2021_05_11_16_58_35':
+      calibration: True
+      validation: True
+      calibration_start:
+        - [0,57]
+      calibration_end:
+        - [2,23]
+      validation_start:
+        - [2,26]
+      validation_end:
+        - [3,12]

@@ -8,9 +8,9 @@ calibration:
 visualization:
   start_time: 
     - 0
-    - 0
+    - 30
   end_time: 
-    - 4
+    - 1
     - 0
   save_world_output: True
   save_eye_output: True
@@ -23,7 +23,7 @@ visualization:
 
 
 directory:
-  session_directory: "/hdd01/kamran_sync/vedbcloud0/staging/"
-  gaze_directory:  "/hdd01/kamran_sync/vedbcloud0/processed/gaze_pilot/"
-  saving_directory: "/hdd01/kamran_sync/vedbcloud0/processed/visualization/"
+  session_directory: "/home/kamran/temp_sync/vedbcloud0/staging/"
+  gaze_directory:  "/home/kamran/temp_sync/vedbcloud0/processed/gaze_pilot/"
+  saving_directory: "/home/kamran/temp_sync/vedbcloud0/processed/visualization/"
   cumulative_gaze_file: "/home/kamran/Desktop/gaze_accuracy.npz"
