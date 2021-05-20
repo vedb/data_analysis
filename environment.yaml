@@ -1,0 +1,28 @@
+name: vedb_analysis
+channels:
+  - anaconda
+  - conda-forge
+  - auto 
+  - vedb
+dependencies:
+  - python=3.7
+  - numpy
+  - scipy
+  - matplotlib
+  - jupyter
+  - ipython
+  - pillow
+  - imageio
+  - h5py
+  - pyyaml
+  - seaborn
+  - pandas
+  - appdirs
+  - python-couchdb
+  - opencv=4.2.0
+  - msgpack-python=0.6.2
+  - pip
+  - pip:
+    - git+https://github.com/vedb/file_io@main
+    - git+https://github.com/vedb/docdb_lite@main
+    - git+https://github.com/vedb/vedb-store@devel
