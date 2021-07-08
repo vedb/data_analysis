@@ -254,7 +254,7 @@ def show_world_v01(
 
     print("\nDone!")
 
-    cv2.destroyAllWindows()
+    # cv2.destroyAllWindows()
     cap.release()
     vid.close()
     # Release the video writer handler so that the output video is saved to disk
@@ -441,7 +441,8 @@ def show_world_v02(
     print("\nDone!")
     print("cal : {} {}".format(cal_points.shape,cal_gaze.shape))
     print("val : {} {}".format(val_points.shape,val_gaze.shape))
-    cv2.destroyAllWindows()
+    # Todo: fix the issue regarding the opencv installation
+    # cv2.destroyAllWindows()
     cap.release()
     vid.close()
 

@@ -7,11 +7,11 @@ calibration:
 
 visualization:
   start_time: 
-    - 3
-    - 9
+    - 0
+    - 30
   end_time: 
-    - 4
-    - 9
+    - 1
+    - 0
   use_vedb_gaze_pipeline: False
   pupil_labs_output_id: 0
   save_world_output: True

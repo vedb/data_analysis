@@ -1,7 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module type="PYTHON_MODULE" version="4">
   <component name="NewModuleRootManager">
+<<<<<<< HEAD
     <content url="file://$MODULE_DIR$" />
+=======
+    <content url="file://$MODULE_DIR$">
+      <excludeFolder url="file://$MODULE_DIR$/venv" />
+    </content>
+>>>>>>> c7013378b25bab2adcbe1efff8eb7044d6df30b7
     <orderEntry type="jdk" jdkName="Python 3.7 (pomlab)" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
   </component>
