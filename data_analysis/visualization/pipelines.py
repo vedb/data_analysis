@@ -5,6 +5,7 @@ import numpy as np
 import tqdm
 import os
 from ..gaze import gaze_utils
+from ..gaze import marker_detection
 from .gaze_quality import plot_gaze_accuracy_heatmap
 import cv2
 import imageio
@@ -587,6 +588,139 @@ def show_gaze_accuracy_v01(
 
     return
 
+def show_gaze_tracking_accuracy_v01(
+    session_directory,
+    session_folder,
+    param_dict,
+    world_scale=1,
+    progress_bar=tqdm.tqdm,
+):
+    print(param_dict.keys())
+    # Todo: Read length of the session id from parameters?
+    session_id = session_folder[-19:] + '/'
+    output_path = param_dict['directory']['saving_directory'] + session_id
+    gaze_direcory = param_dict['directory']['gaze_directory'] + session_id
+
+    # Deal with inputs
+    if output_path is None:
+        #output_path = session_folder
+        raise ValueError("parameters' yaml file doesn't have valid saving_directory!")
+    else:
+        print("saving results to: ", output_path)
+
+    start_time = param_dict['visualization']['start_time']
+    end_time = param_dict['visualization']['end_time']
+    save_video = param_dict['visualization']['save_world_output']
+    world_scale = param_dict['visualization']['world_scale']
+    eye_scale = param_dict['visualization']['eye_scale']
+
+    gaze_calibration_tag = param_dict['calibration']['pupil_detection'] + '_' +\
+          param_dict['calibration']['eye'] + '_' +\
+          param_dict['calibration']['algorithm']
+
+    # Todo: Read this from session info
+    fps = 30
+    if not os.path.exists(output_path):
+        print("creating", output_path)
+        os.makedirs(output_path)
+
+    tag = param_dict['calibration']['pupil_detection'] + '_' +\
+          param_dict['calibration']['eye'] + '_' +\
+          param_dict['calibration']['algorithm']
+    print('tag : ', tag)
+    string_name = os.path.join(gaze_direcory, tag + "_{step}.npz")
+    print("file_name", string_name)
+
+    # (0) Get session
+    session = vedb_store.Session(folder=session_folder)
+    # Get world video files
+    world_time_file, world_video_file = session.paths["world_camera"]
+    # (1) Read Start and End Indexes
+    start_index = (start_time[0] * 60 + start_time[1]) * fps
+    end_index = (end_time[0] * 60 + end_time[1]) * fps
+    # (2) Read Gaze File
+    gaze_file = string_name.format(step="gaze")
+    print("gaze_file: ", gaze_file)
+
+    if os.path.exists(gaze_file):
+        print("Loading gaze data")
+        gaze_arrays = {}
+        dat = np.load(gaze_file, allow_pickle=True)
+        for k in dat.keys():
+            gaze_arrays[k] = dat[k]
+        gaze_list = gaze_utils.arraydict_to_dictlist(gaze_arrays)
+        gaze_timestamp = []
+        for my_index in range(len(gaze_list)):
+            gaze_timestamp.append(gaze_list[my_index]['gaze_binocular']['timestamp'])
+
+    elif param_dict['visualization']['use_vedb_gaze_pipeline'] == False:
+        output_id = param_dict['visualization']['pupil_labs_output_id']
+        gaze_df = gaze_utils.read_pl_gaze_csv(session_folder, output_id)
+        gaze_list = gaze_df[['norm_pos_x', 'norm_pos_y']].values
+        gaze_timestamp = gaze_df.gaze_timestamp.values
+    else:
+        raise ValueError("No valid gaze file was found!", gaze_file)
+    # for key, value in gaze_list[0].items():
+    #     print("Gaze List", key, value)
+
+    # (3) Validation Marker detection
+    val_ref_file = string_name.format(step="validation_ref_pos_dict")
+    # Todo: Make sure this is handled correctly
+    # Get world video files
+    # world_time_file, world_video_file = session.paths["world_camera"]
+    # Load 1 second of data 10 seconds in (to allow time for camera to start)
+    # world_time, world_video = session.load("world_camera", idx=(10, 11))
+    # _, video_vdim, video_hdim = world_video.shape[:3]
+    # world_video_file = session_folder + "world.mp4"
+    if os.path.exists(val_ref_file):
+        print("Loading validation markers")
+        ref_arrays = {}
+        data = np.load(val_ref_file, allow_pickle=True)
+        for k in data.keys():
+            ref_arrays[k] = data[k]
+        ref_list = gaze_utils.arraydict_to_dictlist(ref_arrays)
+    else:
+        fn_marker = marker_detection.find_checkerboard
+        inputs_marker = dict(
+            fpaths=dict(video_data=world_video_file, timestamps=world_time_file),
+            variable_names=None,
+        )
+        print("\n\nRunning Validation marker detection \n\n")
+        # Run marker detection
+        batch_size_marker = 100
+        val_ref_list = vmp.utils.batch_run(
+            fn_marker,
+            inputs_marker,
+            batch_size=batch_size_marker,
+            batch_combine_fn=vmp.utils.list_reduce,
+            scale=0.5,
+            progress_bar=progress_bar,
+        )
+        print(val_ref_list)
+        np.savez(val_ref_file, val_ref_list)
+        val_ref_file = string_name.format(step="validation_ref_pos")
+        # Get arrays instead of dicts
+        val_ref_arrays = gaze_utils.dictlist_to_arraydict(val_ref_list)
+        # Save calibration markers
+        np.savez(val_ref_file, **val_ref_arrays)
+    print("validation len: ", len(val_ref_list))
+
+    gaze_norm_x = []
+    gaze_norm_y = []
+    confidence = []
+    print("Finding gaze indexes: ", len(ref_arrays['timestamp']))
+    for ref_time in ref_arrays['timestamp']:
+        gaze_index = np.argmin(np.abs((gaze_timestamp - ref_time).astype(float)))
+        gaze_norm_x.append(gaze_list[gaze_index,0])
+        gaze_norm_y.append(gaze_list[gaze_index,1])
+        confidence.append(gaze_df['confidence'].values[gaze_index])
+    gaze_array = np.array([gaze_norm_x, gaze_norm_y])
+    print(gaze_array.shape)
+    file_name = os.path.join(output_path, tag + "_{step}.png")
+    file_name.format(step="calibration_accuracy")
+    plot_gaze_accuracy_heatmap(ref_arrays['norm_pos'], gaze_array.T, confidence, file_name, reference_type="calibration")
+
+    return
 
 def show_eye_confidence_v01(
     session_directory,

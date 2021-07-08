@@ -2,7 +2,8 @@
 
 import numpy as np
 import cv2
-
+import pandas as pd
+import os
 
 def onoff_from_binary(data, return_duration=True):
     """Converts a binary variable data into onsets, offsets, and optionally durations
@@ -85,3 +86,9 @@ def arraydict_to_dictlist(arraydict):
             frame_dict[k] = value
         out.append(frame_dict)
     return out
+
+def read_pl_gaze_csv(session_folder, output_id):
+    sub_directory = str(output_id) * 3
+    csv_file_name = os.path.join(session_folder,'exports',sub_directory,"gaze_positions.csv")
+    print("CSV File Name: ", csv_file_name)
+    return pd.read_csv(csv_file_name)
