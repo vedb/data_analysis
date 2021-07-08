@@ -12,6 +12,8 @@ visualization:
   end_time: 
     - 1
     - 0
+  use_vedb_gaze_pipeline: False
+  pupil_labs_output_id: 0
   save_world_output: True
   save_eye_output: True
   world_scale: 0.25
