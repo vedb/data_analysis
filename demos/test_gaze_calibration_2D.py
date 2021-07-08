@@ -24,6 +24,8 @@ if __name__ == "__main__":
 #    sessions = glob.glob(session_directory + "*")
 
     sessions = [
+                # "/hdd01/kamran_sync/vedbcloud0/raw/2020_11_06_13_38_53",
+                # "/hdd01/kamran_sync/vedbcloud0/raw/2020_10_11_13_31_08",
                 # "/home/kamran/temp_sync/vedbcloud0/staging/2021_04_11_09_26_11",
                 "/home/kamran/temp_sync/vedbcloud0/staging/2021_05_11_16_58_35",
                 # "/hdd01/kamran_sync/vedbcloud0/raw/2020_11_06_13_38_53",
