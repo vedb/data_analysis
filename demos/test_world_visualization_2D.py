@@ -2,7 +2,6 @@ import os
 import sys
 import glob
 import yaml
-from data_analysis import gaze
 from data_analysis import visualization
 
 # Directory for the recording sessions
@@ -33,7 +32,7 @@ if __name__ == "__main__":
         result = False
         print("running analysis for:", session_folder)
         # try:
-        result = visualization.pipelines.show_world_v02(
+        result = visualization.pipelines.show_world_v01(
             session_directory, session_folder , param_dict)
         # except:
         #    print("Failed for session %s " % session_folder)

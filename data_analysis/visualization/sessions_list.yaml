@@ -197,3 +197,15 @@ sessions:
 #      - [2,56]
 #    validation_end:
 #      - [3,15]
+
+    '2021_05_11_16_58_35':
+      calibration: True
+      validation: True
+      calibration_start:
+        - [0,57]
+      calibration_end:
+        - [2,23]
+      validation_start:
+        - [2,26]
+      validation_end:
+        - [3,12]
