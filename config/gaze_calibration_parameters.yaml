@@ -7,4 +7,4 @@ calibration:
 
 directory:
   session_directory: "/home/kamran/temp_sync/vedbcloud0/staging/"
-  saving_directory: "/home/kamran/temp_sync/vedbcloud0/processed/gaze_pilot/"
+  gaze_directory: "/home/kamran/temp_sync/vedbcloud0/processed/gaze_pilot/"
