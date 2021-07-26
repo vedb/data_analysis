@@ -6,5 +6,5 @@ calibration:
   algorithm: 2D-PL
 
 directory:
-  session_directory: "/home/kamran/temp_sync/vedbcloud0/staging/"
-  gaze_directory: "/home/kamran/temp_sync/vedbcloud0/processed/gaze_pilot/"
+  session_directory: "/hdd01/kamran_sync/"
+  gaze_directory: "/hdd01/processed/gaze_pilot/"

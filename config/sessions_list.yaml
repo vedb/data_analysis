@@ -200,7 +200,106 @@ sessions:
 #      validation_end:
 #        - [3,12]
 
-    '2021_04_11_09_26_11':
+#    '2021_04_11_09_26_11':
+#      calibration: True
+#      validation: True
+#      calibration_start:
+#        - [0,10]
+#      calibration_end:
+#        - [1,30]
+#      validation_start:
+#        - [1,33]
+##        - [9,26]
+#      validation_end:
+#        - [2,42]
+##        - [10,25]
+
+#    '2021_07_13_11_34_04': #short treadmill test, blurry world video
+#      calibration: True
+#      validation: True
+#      calibration_start:
+#        - [0,10]
+#      calibration_end:
+#        - [1,30]
+#      validation_start:
+#        - [1,33]
+#      validation_end:
+#        - [2,42]
+
+#    '2021_07_13_11_46_10': #short treadmill test, blurry world video
+#      calibration: True
+#      validation: True
+#      calibration_start:
+#        - [0,10]
+#      calibration_end:
+#        - [1,30]
+#      validation_start:
+#        - [1,33]
+#      validation_end:
+#        - [2,42]
+
+#    '2021_07_13_11_51_56': #short treadmill test, blurry world video
+#      calibration: True
+#      validation: True
+#      calibration_start:
+#        - [0,10]
+#      calibration_end:
+#        - [1,30]
+#      validation_start:
+#        - [1,33]
+#      validation_end:
+#        - [2,42]
+
+#    '2021_07_13_11_58_07': #short treadmill test, blurry world video
+#      calibration: True
+#      validation: True
+#      calibration_start:
+#        - [0,10]
+#      calibration_end:
+#        - [1,30]
+#      validation_start:
+#        - [1,33]
+#      validation_end:
+#        - [2,42]
+
+#    '2021_07_13_14_32_23': #short treadmill test, blurry world video
+#      calibration: True
+#      validation: True
+#      calibration_start:
+#        - [0,10]
+#      calibration_end:
+#        - [1,30]
+#      validation_start:
+#        - [1,33]
+#      validation_end:
+#        - [2,42]
+
+
+#    '2021_07_13_14_37_32': #short treadmill test, blurry world video
+#      calibration: True
+#      validation: True
+#      calibration_start:
+#        - [0,10]
+#      calibration_end:
+#        - [1,30]
+#      validation_start:
+#        - [1,33]
+#      validation_end:
+#        - [2,42]
+
+#    '2021_07_13_14_43_36': #short treadmill test, blurry world video
+#      calibration: True
+#      validation: True
+#      calibration_start:
+#        - [0,10]
+#      calibration_end:
+#        - [1,30]
+#      validation_start:
+#        - [1,33]
+#      validation_end:
+#        - [2,42]
+
+    '2021_07_13_15_27_51':  # Bharath's treadmill session the first few minutes is blurry though!!!
       calibration: True
       validation: True
       calibration_start:
@@ -209,7 +308,139 @@ sessions:
         - [1,30]
       validation_start:
         - [1,33]
-#        - [9,26]
       validation_end:
         - [2,42]
-#        - [10,25]
+
+    '2021_07_14_17_00_32': # Kamran's treadmill session
+      calibration: True
+      validation: True
+      calibration_start:
+        - [0,10]
+      calibration_end:
+        - [1,30]
+      validation_start:
+        - [1,33]
+      validation_end:
+        - [2,42]
+
+    '2021_07_14_17_30_31': # Kamran's treadmill session
+      calibration: True
+      validation: True
+      calibration_start:
+        - [0,10]
+      calibration_end:
+        - [1,30]
+      validation_start:
+        - [1,33]
+      validation_end:
+        - [2,42]
+
+    '2021_07_16_12_29_06': # Someone's treadmill session
+      calibration: True
+      validation: True
+      calibration_start:
+        - [0,10]
+      calibration_end:
+        - [1,30]
+      validation_start:
+        - [1,33]
+      validation_end:
+        - [2,42]
+
+    '2021_07_16_13_00_43': # Savvy's treadmill session
+      calibration: True
+      validation: True
+      calibration_start:
+        - [0,10]
+      calibration_end:
+        - [1,30]
+      validation_start:
+        - [1,33]
+      validation_end:
+        - [2,42]
+
+    '2021_07_21_13_47_43': # Arnab's treadmill session
+      calibration: True
+      validation: True
+      calibration_start:
+        - [0,10]
+      calibration_end:
+        - [1,30]
+      validation_start:
+        - [1,33]
+      validation_end:
+        - [2,42]
+
+#    '2021_07_21_14_28_51': # Short test session
+#      calibration: False
+#      validation: False
+#      calibration_start:
+#        - [0,10]
+#      calibration_end:
+#        - [1,30]
+#      validation_start:
+#        - [1,33]
+#      validation_end:
+#        - [2,42]
+
+#    '2021_07_22_13_39_26': # Wrong FLIR settings unusable
+#      calibration: True
+#      validation: True
+#      calibration_start:
+#        - [0,10]
+#      calibration_end:
+#        - [1,30]
+#      validation_start:
+#        - [1,33]
+#      validation_end:
+#        - [2,42]
+
+#    '2021_07_22_14_04_09': # Wrong FLIR settings unusable
+#      calibration: True
+#      validation: True
+#      calibration_start:
+#        - [0,10]
+#      calibration_end:
+#        - [1,30]
+#      validation_start:
+#        - [1,33]
+#      validation_end:
+#        - [2,42]
+
+#    '2021_07_22_14_49_47': # Wrong FLIR settings unusable
+#      calibration: True
+#      validation: True
+#      calibration_start:
+#        - [0,10]
+#      calibration_end:
+#        - [1,30]
+#      validation_start:
+#        - [1,33]
+#      validation_end:
+#        - [2,42]
+
+#    '2021_07_22_15_25_59': # Wrong FLIR settings unusable
+#      calibration: True
+#      validation: True
+#      calibration_start:
+#        - [0,10]
+#      calibration_end:
+#        - [1,30]
+#      validation_start:
+#        - [1,33]
+#      validation_end:
+#        - [2,42]
+
+
+#    '2021_07_22_23_29_26': # Camera Calibration Session for Intrinsics and Extrinsics
+#      calibration: True
+#      validation: True
+#      calibration_start:
+#        - [0,10]
+#      calibration_end:
+#        - [1,30]
+#      validation_start:
+#        - [1,33]
+#      validation_end:
+#        - [2,42]
+
