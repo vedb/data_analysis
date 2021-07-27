@@ -1,4 +1,14 @@
-
+from glob import glob
+import cv2
+import os
+import sys
+import yaml
+import matplotlib as mpl
+import numpy as np
+from skimage.io import imread
+import matplotlib.pyplot as plt
+from ellipses import LSqEllipse  # The code is pulled from https://github.com/bdhammel/least-squares-ellipse-fitting
+import time
 # This annotation script is written by Kamran Binaee and Kaylie Cappurro inspired by DeepVog repo by Taha Emre
 
 
@@ -19,12 +29,21 @@ def fit_pupil(image_path, saving_directory, curr_image_number, plot=False, write
     MIDDLE = 2
     RIGHT = 3
     '''
+    upper_color = 'purple'
+    lower_color = 'green'
     if 'pupil' in eye_part:
         point_color = 'yellow'
         fill_color = 'orange'
-    else:
+    elif 'iris' in eye_part:
         point_color = 'blue'
         fill_color = 'cyan'
+    elif 'upper' in eye_part:
+        point_color = 'purple'
+        fill_color = 'grey'
+    elif 'lower' in eye_part:
+        point_color = 'green'
+        fill_color = 'white'
+
 
     base = os.path.basename(image_path)
     image_file_name = os.path.splitext(base)[0]
@@ -33,73 +52,102 @@ def fit_pupil(image_path, saving_directory, curr_image_number, plot=False, write
         plt.ion()
         fig, ax = plt.subplots(figsize=(15, 15))
         img = imread(image_path)
-        ax.set_title('ID:{} File Name:{}'.format(curr_image_number, os.path.basename(image_path)))
+        ax.set_title('Annotating {} for ID:{}\n File Name:{}'.format(eye_part.replace('_',''),curr_image_number, os.path.basename(image_path)))
         ax.imshow(img, cmap='gray')
+
+        if 'upper' in eye_part or 'lower' in eye_part:
+            if 'upper' in eye_part:
+                annotated_text_file_name = _get_annotation_path_from_image_path(image_file_name, saving_directory,
+                                                                                '_lower')
+                my_color = lower_color
+            elif 'lower' in eye_part:
+                annotated_text_file_name = _get_annotation_path_from_image_path(image_file_name, saving_directory,
+                                                                                '_upper')
+                my_color = upper_color
+            if os.path.exists(annotated_text_file_name):
+                with open(annotated_text_file_name.replace(".txt", "_points.txt")) as f:
+                    w, h = [x for x in next(f).split()]  # read first line
+                    array = []
+                    for line in f:  # read rest of lines
+                        array.append([np.float(x) for x in line.split(',')])
+                previous_x = [np.float(x[0]) for x in array]
+                previous_y = [np.float(x[1]) for x in array]
+                ax.plot(previous_x, previous_y, c=my_color, marker='x')
 
         key_points = plt.ginput(-1, mouse_pop=2, mouse_stop=3,
                                 timeout=-1)  # If negative, accumulate clicks until the input is terminated manually.
-
+        points_x = [x[0] for x in key_points]
+        points_y = [x[1] for x in key_points]
         if not key_points:
-            # if write_annotation:
-            #     annotated_text_file_name = _get_annotation_path_from_image_path(image_file_name, saving_directory,
-            #                                                                     eye_part)
-            #     with open(annotated_text_file_name, 'w+') as f:
-            #         f.write("closed_eye")
-            #
-            #     with open(annotated_text_file_name.replace(".txt", "_points.txt"),
-            #               'w+') as f:  # For detecting selected
-            #         f.write("closed_eye")
             plt.close()
-            result = 'quit'
+            result = 'proceed'
             break
-
-        fitted = LSqEllipse()
-        fitted.fit([[x[0] for x in key_points], [x[1] for x in key_points]])
-        center_coord, width, height, angle = fitted.parameters()
-        axes = np.array([width, height])
-        angle = np.rad2deg(angle)
+        if 'pupil' in eye_part or 'iris' in eye_part:
+            fitted = LSqEllipse()
+            fitted.fit([points_x, points_y])
+            center_coord, width, height, angle = fitted.parameters()
+            axes = np.array([width, height])
+            angle = np.rad2deg(angle)
+        elif 'upper' in eye_part or 'lower' in eye_part:
+            poly = np.poly1d(np.polyfit(points_x, points_y, 4))
+            print("\npoly calculated:", poly)
+            print('\n')
 
         if write_annotation:
             annotated_text_file_name = _get_annotation_path_from_image_path(image_file_name, saving_directory,
                                                                             eye_part)
             with open(annotated_text_file_name, 'w+') as f:
-                if all([c <= 50 for c in center_coord]):
-                    points_str = '-1:-1'
-                else:
+                # if all([c <= 50 for c in center_coord]):
+                #     points_str = '-1:-1'
+                # else:
+                if 'pupil' in eye_part or 'iris' in eye_part:
                     points_str = '{}, {}'.format(center_coord[0], center_coord[1])
-                f.write(points_str)
+                    f.write(points_str)
+                elif 'upper' in eye_part or 'lower' in eye_part:
+                    f.write('{}, {}\n'.format(min(points_x), points_y[np.argmin(points_x)]))
+                    print("The left most eyelid point: {:.2f} {:.2f}".format(min(points_x), points_y[np.argmin(points_x)]))
+                    f.write('{}, {}\n'.format(max(points_x), points_y[np.argmax(points_x)]))
+                    print("The right most eyelid point: {:.2f} {:.2f}".format(max(points_x), points_y[np.argmax(points_x)]))
 
             with open(annotated_text_file_name.replace(".txt","_points.txt"), 'w+') as f:  # For detecting selected
                 for point in key_points:
                     f.write('{}, {}\n'.format(point[0], point[1]))
 
         if plot:
-            # ax.annotate('pred center', xy=center_coord, xycoords='data',
-            #             xytext=(0.2, 0.2), textcoords='figure fraction',
-            #             arrowprops=dict(arrowstyle="->"), color='y')
-            # plt.scatter(x=center_coord[0], y=center_coord[1], c='red', marker='x')
             all_x = [x[0] for x in key_points]
             all_y = [x[1] for x in key_points]
             plt.scatter(x=all_x, y=all_y, c=point_color, marker='x')
 
-            ell = mpl.patches.Ellipse(xy=center_coord, width=axes[0] * 2,
-                                      height=axes[1] * 2, angle=angle, fill=True, color=fill_color, alpha=0.4)
+            if 'pupil' in eye_part or 'iris' in eye_part:
+                ell = mpl.patches.Ellipse(xy=center_coord, width=axes[0] * 2,
+                                          height=axes[1] * 2, angle=angle, fill=True, color=fill_color, alpha=0.4)
+                ax.add_artist(ell)
+            elif 'upper' in eye_part or 'lower' in eye_part:
+                for my_x in np.arange(min(points_x), max(points_x), 1):
+                    my_y = poly(my_x)
+                    plt.plot(my_x, my_y, c=point_color, marker='o')
 
-            ax.add_artist(ell)
-            # i = 0
-            # while os.path.exists("%d_ellipse.png" % i):
-            #     i += 1
-            # fig.savefig('%d_ellipse.png' % i)
-            output_image_file = os.path.dirname(image_path) + "/Results/" + \
-                                os.path.splitext(os.path.basename(image_path))[0] + eye_part + "_ellipse.png"
             output_image_file = saving_directory + image_file_name + eye_part + "_ellipse.png"
             fig.savefig(output_image_file)
             print("saved: ", os.path.basename(output_image_file))
+            print('\n')
             plt.show()
             confirmation_point = plt.ginput(1, timeout=-1, mouse_add=3, mouse_stop=3)
             plt.close()
             if len(confirmation_point) == 0:
                 break
+        # Hacky way to read the q press to quit the loop otherwise the QT doesn't let go of the thread
+        # TODO: gracefully stop the tool
+        time.sleep(.01)
+        answer = input("")
+        print('q pressed!!', answer)
+        if answer == 'q':
+            print("\n\nQuiting the Annotation tool!")
+            result = 'quit'
+            # plt.ioff()
+            # plt.close()
+            # sys.exit(0)
+            break
     return result
 
 
@@ -117,17 +165,10 @@ def annotate(image_directory, saving_directory, eye_part='pupil'):
             print("Found the existing txt file for: ", os.path.basename(annotated_text_file_name))
         else:
             result = fit_pupil(image_path=image_path, saving_directory=saving_directory, curr_image_number=i, plot=True, write_annotation=True, eye_part=eye_part)
-            if result is not 'success':
+            if result == 'quit':
                 print("\n\nQuit!!\n\n")
                 break
         i = i + 1
-
-    # for imag_path in imag_paths:
-    #     if _get_annotation_path_from_image_path(imag_path, eye_part) in annotation_paths:
-    #         continue
-    #     else:
-    #         fit_pupil(imag_path, curr_image_number=i, plot=True, write_annotation=True, eye_part=eye_part)
-    #         i += 1
 
 
 def parse_pipeline_parameters(parameters_fpath):
@@ -138,17 +179,6 @@ def parse_pipeline_parameters(parameters_fpath):
 
 
 if __name__ == '__main__':
-    from glob import glob
-    import cv2
-    import os
-    import sys
-    import yaml
-    import matplotlib as mpl
-    import numpy as np
-    from skimage.io import imread
-
-    from ellipses import LSqEllipse  # The code is pulled from https://github.com/bdhammel/least-squares-ellipse-fitting
-
     plt = mpl.pyplot
     fig = plt.figure()
     # mpl.rcParams["savefig.directory"] = os.chdir(
@@ -173,7 +203,4 @@ if __name__ == '__main__':
     else:
         raise ValueError("Wrong Eye Part for Annotation!!!")
     annotate(image_directory=image_directory, saving_directory=saving_directory, eye_part='_' + eye_part)
-    # if len(sys.argv) > 2:
-    #     annotate(base_dir=sys.argv[1], eye_part='_' + sys.argv[2])
-    # else:
-    #     annotate()
+    sys.exit(0)

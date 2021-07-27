@@ -233,11 +233,11 @@ def pupil_2d_binocular_v01(
     print(param_dict.keys())
     # Todo: Read length of the session id from parameters?
     session_id = session_folder[-19:] + '/'
-    output_path =   param_dict['directory']['saving_directory'] + session_id
+    output_path = param_dict['directory']['gaze_directory'] + session_id
     # Deal with inputs
     if output_path is None:
         #output_path = session_folder
-        raise ValueError("parameters' yaml file doesn't have valid saving_directory!")
+        raise ValueError("parameters' yaml file doesn't have valid gaze saving_directory!")
     else:
         print("saving results to: ", output_path)
 

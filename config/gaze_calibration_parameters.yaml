@@ -1,0 +1,10 @@
+version: 0.0.1
+
+calibration:
+  pupil_detection: PL
+  eye: binocular
+  algorithm: 2D-PL
+
+directory:
+  session_directory: "/hdd01/kamran_sync/"
+  gaze_directory: "/hdd01/processed/gaze_pilot/"
