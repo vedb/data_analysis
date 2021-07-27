@@ -6,5 +6,5 @@ annotation:
 
 
 directory:
-  image_directory:  "/home/kamran/Downloads/Unlabeled_Eye_Images/_28_15_eye1_enhance/batch_0/"
+  image_directory: "/hdd01/eye_images/test_folder_2/"
   saving_directory: "/home/kamran/Downloads/eye_image_annotation_results/batch_0/"
