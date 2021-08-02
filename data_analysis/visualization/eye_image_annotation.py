@@ -54,6 +54,8 @@ def fit_pupil(image_path, saving_directory, curr_image_number, plot=False, write
         img = imread(image_path)
         ax.set_title('Annotating {} for ID:{}\n File Name:{}'.format(eye_part.replace('_',''),curr_image_number, os.path.basename(image_path)))
         ax.imshow(img, cmap='gray')
+        ax.set_xlim(-20, 420)
+        ax.set_ylim(-20, 420)
 
         if 'upper' in eye_part or 'lower' in eye_part:
             if 'upper' in eye_part:
