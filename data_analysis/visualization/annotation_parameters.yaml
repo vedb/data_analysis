@@ -2,9 +2,15 @@ version: 0.0.1
 
 annotation:
   # Options are pupil, iris, upper, lower
-  eye_part: pupil
+  eye_part: "pupil"
+  upper_skin_color: "grey"
+  lower_skin_color: "grey"
+  skin_color: "grey"
+  sclera_color: "cyan"
+  iris_color: "blue"
+  pupil_color: "red"
 
 
 directory:
   image_directory: "/hdd01/eye_images/test_folder_2/"
-  saving_directory: "/home/kamran/Downloads/eye_image_annotation_results/batch_0/"
+  saving_directory: "/home/kamran/Downloads/eye_image_annotation_results/batch_1/"
