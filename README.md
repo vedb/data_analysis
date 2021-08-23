@@ -25,7 +25,7 @@ This repository has four major components:
 * **visualization**
   * Pupil tracking visualization:
     * Pupil-labs pipeline: The ellipse and confidence values
-    * RITnet pipeline: pupil, iris, scelera and skin masks
+    * RITnet pipeline: pupil, iris, scelera, skin masks and ellipse fit confidence values
     * DeepVog pipeline: pupil region, 3D gaze vector, network output mask
   * Gaze overlaid video:
     * World and super imposed eye videos plus the gaze point
