@@ -1,0 +1,895 @@
+sessions:
+
+############## Slippage Data UNR ##############
+    '2021_07_13_15_27_51':  # Bharath's treadmill session the first few minutes is blurry though!!!
+      rig: V1
+      calibration: True
+      validation: True
+      calibration_start:
+        - [0,38]
+      calibration_end:
+        - [1,14]
+      validation_start:
+        - [1,15]
+      validation_end:
+        - [1,50]
+      slow_start:
+        - [2,2]
+      slow_end:
+        - [3,22]
+      slow_validation_start:
+        - [5,29]
+      slow_validation_end:
+        - [6,2]
+      medium_start:
+        - [7,54]
+      medium_end:
+        - [9,19]
+      medium_validation_start:
+        - [10,38]
+      medium_validation_end:
+        - [11,12]
+      fast_start:
+        - [11,30]
+      fast_end:
+        - [12,45]
+      fast_validation_start:
+        - [13,50]
+      fast_validation_end:
+        - [14,25]
+##
+    '2021_07_13_16_25_41':  # Bharath's treadmill session
+      rig: V2
+      calibration: True
+      validation: True
+      calibration_start:
+        - [1,6]
+      calibration_end:
+        - [1,45]
+      validation_start:
+        - [1,47]
+      validation_end:
+        - [2,29]
+      slow_start:
+        - [2,38]
+      slow_end:
+        - [3,45]
+      slow_validation_start:
+        - [4,14]
+      slow_validation_end:
+        - [4,54]
+      medium_start:
+        - [5,7]
+      medium_end:
+        - [6,12]
+      medium_validation_start:
+        - [6,34]
+      medium_validation_end:
+        - [7,15]
+      fast_start:
+        - [7,30]
+      fast_end:
+        - [8,31]
+      fast_validation_start:
+        - [8,55]
+      fast_validation_end:
+        - [9,35]
+#
+    '2021_07_14_17_00_32': # Kamran's treadmill session
+      rig: V2
+      calibration: True
+      validation: True
+      calibration_start:
+        - [0,10]
+      calibration_end:
+        - [0,46]
+      validation_start:
+        - [0,47]
+      validation_end:
+        - [1,23]
+      slow_start:
+        - [1,37]
+      slow_end:
+        - [2,44]
+      slow_validation_start:
+        - [2,55]
+      slow_validation_end:
+        - [3,29]
+      medium_start:
+        - [3,58]
+      medium_end:
+        - [5,3]
+      medium_validation_start:
+        - [5,27]
+      medium_validation_end:
+        - [6,2]
+      fast_start:
+        - [6,27]
+      fast_end:
+        - [7,31]
+      fast_validation_start:
+        - [7,45]
+      fast_validation_end:
+        - [8,20]
+
+    '2021_07_14_17_30_31': # Kamran's treadmill session
+      rig: V1
+      calibration: True
+      validation: True
+      calibration_start:
+        - [0,32]
+      calibration_end:
+        - [1,7]
+      validation_start:
+        - [1,8]
+      validation_end:
+        - [1,45]
+      slow_start:
+        - [2,16]
+      slow_end:
+        - [3,21]
+      slow_validation_start:
+        - [3,30]
+      slow_validation_end:
+        - [4,3]
+      medium_start:
+        - [4,20]
+      medium_end:
+        - [5,38]
+      medium_validation_start:
+        - [5,56]
+      medium_validation_end:
+        - [6,14]
+      fast_start:
+        - [6,42]
+      fast_end:
+        - [7,45]
+      fast_validation_start:
+        - [7,54]
+      fast_validation_end:
+        - [8,30]
+
+    '2021_07_16_12_29_06': # Savvy's treadmill session
+      rig: V1
+      calibration: True
+      validation: True
+      calibration_start:
+        - [0,22]
+      calibration_end:
+        - [1,1]
+      validation_start:
+        - [1,2]
+      validation_end:
+        - [1,42]
+      slow_start:
+        - [2,19]
+      slow_end:
+        - [3,30]
+      slow_validation_start:
+        - [3,40]
+      slow_validation_end:
+        - [4,19]
+      medium_start:
+        - [4,35]
+      medium_end:
+        - [5,47]
+      medium_validation_start:
+        - [5,56]
+      medium_validation_end:
+        - [6,34]
+      fast_start:
+        - [6,53]
+      fast_end:
+        - [8,5]
+      fast_validation_start:
+        - [8,12]
+      fast_validation_end:
+        - [8,52]
+
+    '2021_07_16_13_00_43': # Savvy's treadmill session
+      rig: V2
+      calibration: True
+      validation: True
+      calibration_start:
+        - [0,21]
+      calibration_end:
+        - [0,58]
+      validation_start:
+        - [1,0]
+      validation_end:
+        - [1,37]
+      slow_start:
+        - [2,12]
+      slow_end:
+        - [3,21]
+      slow_validation_start:
+        - [3,28]
+      slow_validation_end:
+        - [4,5]
+      medium_start:
+        - [4,23]
+      medium_end:
+        - [5,30]
+      medium_validation_start:
+        - [5,39]
+      medium_validation_end:
+        - [6,16]
+      fast_start:
+        - [6,36]
+      fast_end:
+        - [7,45]
+      fast_validation_start:
+        - [7,53]
+      fast_validation_end:
+        - [8,29]
+
+    '2021_08_02_15_15_46': # Pogen's treadmill session
+      rig: V1
+      calibration: True
+      validation: True
+      calibration_start:
+        - [0,53]
+      calibration_end:
+        - [1,29]
+      validation_start:
+        - [1,30]
+      validation_end:
+        - [2,9]
+      slow_start:
+        - [9,1]
+      slow_end:
+        - [10,11]
+      slow_validation_start:
+        - [10,18]
+      slow_validation_end:
+        - [10,55]
+      medium_start:
+        - [6,47]
+      medium_end:
+        - [7,58]
+      medium_validation_start:
+        - [8,7]
+      medium_validation_end:
+        - [8,44]
+      fast_start:
+        - [4,41]
+      fast_end:
+        - [5,35]
+      fast_validation_start:
+        - [5,51]
+      fast_validation_end:
+        - [6,29]
+
+    '2021_08_02_15_43_09': # Pogen's treadmill session
+      rig: V2
+      calibration: True
+      validation: True
+      calibration_start:
+        - [2,14]
+      calibration_end:
+        - [2,51]
+      validation_start:
+        - [2,54]
+      validation_end:
+        - [3,31]
+      slow_start:
+        - [8,47]
+      slow_end:
+        - [9,50]
+      slow_validation_start:
+        - [9,57]
+      slow_validation_end:
+        - [10,34]
+      medium_start:
+        - [6,26]
+      medium_end:
+        - [7,36]
+      medium_validation_start:
+        - [7,43]
+      medium_validation_end:
+        - [8,22]
+      fast_start:
+        - [4,30]
+      fast_end:
+        - [5,19]
+      fast_validation_start:
+        - [5,28]
+      fast_validation_end:
+        - [6,6]
+    '2021_08_03_13_22_47': # Pogen's treadmill session
+      rig: V2
+      calibration: True
+      validation: True
+      calibration_start:
+        - [0,31]
+      calibration_end:
+        - [1,10]
+      validation_start:
+        - [1,11]
+      validation_end:
+        - [1,49]
+      slow_start:
+        - [2,39]
+      slow_end:
+        - [3,39]
+      slow_validation_start:
+        - [3,45]
+      slow_validation_end:
+        - [4,24]
+      medium_start:
+        - [4,45]
+      medium_end:
+        - [5,51]
+      medium_validation_start:
+        - [6,0]
+      medium_validation_end:
+        - [6,38]
+      fast_start:
+        - [6,56]
+      fast_end:
+        - [8,6]
+      fast_validation_start:
+        - [8,16]
+      fast_validation_end:
+        - [8,55]
+
+    '2021_08_03_13_40_28': # Pogen's treadmill session
+      rig: V1
+      calibration: True
+      validation: True
+      calibration_start:
+        - [0,28]
+      calibration_end:
+        - [1,6]
+      validation_start:
+        - [1,8]
+      validation_end:
+        - [1,46]
+      slow_start:
+        - [2,37]
+      slow_end:
+        - [3,37]
+      slow_validation_start:
+        - [3,48]
+      slow_validation_end:
+        - [4,26]
+      medium_start:
+        - [4,45]
+      medium_end:
+        - [5,51]
+      medium_validation_start:
+        - [6,1]
+      medium_validation_end:
+        - [6,39]
+      fast_start:
+        - [6,56]
+      fast_end:
+        - [8,6]
+      fast_validation_start:
+        - [8,16]
+      fast_validation_end:
+        - [8,54]
+
+    '2021_08_04_13_16_33': # Christian's treadmill session
+      rig: V1
+      calibration: True
+      validation: True
+      calibration_start:
+        - [0,24]
+      calibration_end:
+        - [1,1]
+      validation_start:
+        - [1,8]
+      validation_end:
+        - [1,41]
+      slow_start:
+        - [7,0]
+      slow_end:
+        - [8,12]
+      slow_validation_start:
+        - [8,20]
+      slow_validation_end:
+        - [8,57]
+      medium_start:
+        - [4,48]
+      medium_end:
+        - [6,0]
+      medium_validation_start:
+        - [6,8]
+      medium_validation_end:
+        - [6,45]
+      fast_start:
+        - [2,44]
+      fast_end:
+        - [3,41]
+      fast_validation_start:
+        - [3,53]
+      fast_validation_end:
+        - [4,31]
+
+    '2021_08_04_13_38_54': # Christian's treadmill session
+      rig: V2
+      calibration: True
+      validation: True
+      calibration_start:
+        - [0,26]
+      calibration_end:
+        - [1,4]
+      validation_start:
+        - [1,6]
+      validation_end:
+        - [1,43]
+      slow_start:
+        - [6,51]
+      slow_end:
+        - [8,2]
+      slow_validation_start:
+        - [8,9]
+      slow_validation_end:
+        - [8,47]
+      medium_start:
+        - [4,37]
+      medium_end:
+        - [5,49]
+      medium_validation_start:
+        - [5,57]
+      medium_validation_end:
+        - [6,35]
+      fast_start:
+        - [2,38]
+      fast_end:
+        - [3,34]
+      fast_validation_start:
+        - [3,43]
+      fast_validation_end:
+        - [4,21]
+
+    '2021_08_04_15_21_57': # Arnab's treadmill session
+      rig: V1
+      calibration: True
+      validation: True
+      calibration_start:
+        - [1,5]
+      calibration_end:
+        - [1,42]
+      validation_start:
+        - [1,44]
+      validation_end:
+        - [2,22]
+      slow_start:
+        - [7,25]
+      slow_end:
+        - [8,35]
+      slow_validation_start:
+        - [8,42]
+      slow_validation_end:
+        - [9,18]
+      medium_start:
+        - [5,12]
+      medium_end:
+        - [6,23]
+      medium_validation_start:
+        - [6,31]
+      medium_validation_end:
+        - [7,8]
+      fast_start:
+        - [3,39]
+      fast_end:
+        - [4,7]
+      fast_validation_start:
+        - [4,17]
+      fast_validation_end:
+        - [4,54]
+
+    '2021_08_04_15_44_29': # Arnab's treadmill session
+      rig: V2
+      calibration: True
+      validation: True
+      calibration_start:
+        - [0,23]
+      calibration_end:
+        - [1,0]
+      validation_start:
+        - [1,2]
+      validation_end:
+        - [1,39]
+      slow_start:
+        - [6,45]
+      slow_end:
+        - [7,55]
+      slow_validation_start:
+        - [8,1]
+      slow_validation_end:
+        - [8,39]
+      medium_start:
+        - [4,33]
+      medium_end:
+        - [5,43]
+      medium_validation_start:
+        - [5,52]
+      medium_validation_end:
+        - [6,29]
+      fast_start:
+        - [2,17]
+      fast_end:
+        - [3,22]
+      fast_validation_start:
+        - [3,39]
+      fast_validation_end:
+        - [4,17]
+
+    '2021_08_05_13_23_36': # Christian's treadmill session
+      rig: V2
+      calibration: True
+      validation: True
+      calibration_start:
+        - [0,37]
+      calibration_end:
+        - [1,16]
+      validation_start:
+        - [1,17]
+      validation_end:
+        - [1,55]
+      slow_start:
+        - [2,46]
+      slow_end:
+        - [3,47]
+      slow_validation_start:
+        - [3,56]
+      slow_validation_end:
+        - [4,33]
+      medium_start:
+        - [4,49]
+      medium_end:
+        - [6,1]
+      medium_validation_start:
+        - [6,9]
+      medium_validation_end:
+        - [6,48]
+      fast_start:
+        - [7,5]
+      fast_end:
+        - [8,15]
+      fast_validation_start:
+        - [8,25]
+      fast_validation_end:
+        - [9,3]
+
+    '2021_08_05_13_42_06': # Christian's treadmill session
+      rig: V1
+      calibration: True
+      validation: True
+      calibration_start:
+        - [0,26]
+      calibration_end:
+        - [1,3]
+      validation_start:
+        - [1,5]
+      validation_end:
+        - [1,43]
+      slow_start:
+        - [2,28]
+      slow_end:
+        - [3,32]
+      slow_validation_start:
+        - [3,39]
+      slow_validation_end:
+        - [4,17]
+      medium_start:
+        - [4,33]
+      medium_end:
+        - [5,43]
+      medium_validation_start:
+        - [5,53]
+      medium_validation_end:
+        - [6,31]
+      fast_start:
+        - [6,48]
+      fast_end:
+        - [8,0]
+      fast_validation_start:
+        - [8,10]
+      fast_validation_end:
+        - [8,48]
+
+###### Excluded from analysis ###########################
+#    '2021_08_06_13_40_51': # Arnab's treadmill session
+#      rig: V2
+#      calibration: True
+#      validation: True
+#      calibration_start:
+#        - [1,6]
+#      calibration_end:
+#        - [1,43]
+#      validation_start:
+#        - [1,45]
+#      validation_end:
+#        - [2,22]
+#      slow_start:
+#        - [2,57]
+#      slow_end:
+#        - [4,9]
+#      slow_validation_start:
+#        - [4,19]
+#      slow_validation_end:
+#        - [4,55]
+#      medium_start:
+#        - [5,13]
+#      medium_end:
+#        - [6,21]
+#      medium_validation_start:
+#        - [6,30]
+#      medium_validation_end:
+#        - [7,6]
+#      fast_start:
+#        - [7,22]
+#      fast_end:
+#        - [8,32]
+#      fast_validation_start:
+#        - [8,42]
+#      fast_validation_end:
+#        - [9,19]
+
+
+    '2021_08_06_14_09_04': # Arnab's treadmill session
+      rig: V1
+      calibration: True
+      validation: True
+      calibration_start:
+        - [0,27]
+      calibration_end:
+        - [1,4]
+      validation_start:
+        - [1,6]
+      validation_end:
+        - [1,43]
+      slow_start:
+        - [2,28]
+      slow_end:
+        - [3,30]
+      slow_validation_start:
+        - [3,37]
+      slow_validation_end:
+        - [4,14]
+      medium_start:
+        - [4,35]
+      medium_end:
+        - [5,42]
+      medium_validation_start:
+        - [5,50]
+      medium_validation_end:
+        - [6,27]
+      fast_start:
+        - [6,45]
+      fast_end:
+        - [7,55]
+      fast_validation_start:
+        - [8,4]
+      fast_validation_end:
+        - [8,39]
+
+    '2021_08_06_15_14_57': # Samantha's treadmill session
+      rig: V2
+      calibration: True
+      validation: True
+      calibration_start:
+        - [0,57]
+      calibration_end:
+        - [1,34]
+      validation_start:
+        - [1,36]
+      validation_end:
+        - [2,14]
+      slow_start:
+        - [3,4]
+      slow_end:
+        - [4,2]
+      slow_validation_start:
+        - [4,12]
+      slow_validation_end:
+        - [4,49]
+      medium_start:
+        - [5,9]
+      medium_end:
+        - [6,15]
+      medium_validation_start:
+        - [6,23]
+      medium_validation_end:
+        - [7,1]
+      fast_start:
+        - [7,25]
+      fast_end:
+        - [8,29]
+      fast_validation_start:
+        - [8,38]
+      fast_validation_end:
+        - [9,16]
+
+    '2021_08_06_15_36_53': # Samantha's treadmill session
+      rig: V1
+      calibration: True
+      validation: True
+      calibration_start:
+        - [0,57]
+      calibration_end:
+        - [1,34]
+      validation_start:
+        - [1,36]
+      validation_end:
+        - [2,14]
+      slow_start:
+        - [3,4]
+      slow_end:
+        - [4,0]
+      slow_validation_start:
+        - [4,7]
+      slow_validation_end:
+        - [4,44]
+      medium_start:
+        - [5,7]
+      medium_end:
+        - [6,11]
+      medium_validation_start:
+        - [6,19]
+      medium_validation_end:
+        - [6,57]
+      fast_start:
+        - [7,18]
+      fast_end:
+        - [8,26]
+      fast_validation_start:
+        - [8,35]
+      fast_validation_end:
+        - [9,12]
+
+###### Excluded from analysis ###########################
+#    '2021_08_09_14_10_33': # Samantha's treadmill session
+#      rig: V1
+#      calibration: True
+#      validation: True
+#      calibration_start:
+#        - [0,27]
+#      calibration_end:
+#        - [1,5]
+#      validation_start:
+#        - [1,45]
+#      validation_end:
+#        - [1,39]
+#      slow_start:
+#        - [6,55]
+#      slow_end:
+#        - [8,8]
+#      slow_validation_start:
+#        - [8,16]
+#      slow_validation_end:
+#        - [8,53]
+#      medium_start:
+#        - [4,45]
+#      medium_end:
+#        - [5,56]
+#      medium_validation_start:
+#        - [6,3]
+#      medium_validation_end:
+#        - [6,41]
+#      fast_start:
+#        - [2,39]
+#      fast_end:
+#        - [3,43]
+#      fast_validation_start:
+#        - [3,51]
+#      fast_validation_end:
+#        - [4,28]
+
+###### Excluded from analysis ###########################
+#    '2021_08_09_14_34_53': # Samantha's treadmill session
+#      rig: V2
+#      calibration: True
+#      validation: True
+#      calibration_start:
+#        - [0,27]
+#      calibration_end:
+#        - [1,4]
+#      validation_start:
+#        - [1,6]
+#      validation_end:
+#        - [1,44]
+#      slow_start:
+#        - [6,53]
+#      slow_end:
+#        - [8,3]
+#      slow_validation_start:
+#        - [8,9]
+#      slow_validation_end:
+#        - [8,47]
+#      medium_start:
+#        - [4,40]
+#      medium_end:
+#        - [5,48]
+#      medium_validation_start:
+#        - [5,57]
+#      medium_validation_end:
+#        - [6,34]
+#      fast_start:
+#        - [2,40]
+#      fast_end:
+#        - [3,37]
+#      fast_validation_start:
+#        - [3,45]
+#      fast_validation_end:
+#        - [4,23]
+
+    '2021_08_12_10_39_16': # Savvy's treadmill session
+      rig: V2
+      calibration: True
+      validation: True
+      calibration_start:
+        - [0,35]
+      calibration_end:
+        - [1,12]
+      validation_start:
+        - [1,14]
+      validation_end:
+        - [1,51]
+      slow_start:
+        - [7,8]
+      slow_end:
+        - [8,20]
+      slow_validation_start:
+        - [8,27]
+      slow_validation_end:
+        - [9,4]
+      medium_start:
+        - [4,52]
+      medium_end:
+        - [6,5]
+      medium_validation_start:
+        - [6,13]
+      medium_validation_end:
+        - [6,50]
+      fast_start:
+        - [2,51]
+      fast_end:
+        - [3,49]
+      fast_validation_start:
+        - [3,57]
+      fast_validation_end:
+        - [4,34]
+
+    '2021_08_12_11_06_42': # Savvy's treadmill session
+      rig: V1
+      calibration: True
+      validation: True
+      calibration_start:
+        - [0,24]
+      calibration_end:
+        - [0,59]
+      validation_start:
+        - [1,2]
+      validation_end:
+        - [1,38]
+      slow_start:
+        - [6,49]
+      slow_end:
+        - [8,0]
+      slow_validation_start:
+        - [8,6]
+      slow_validation_end:
+        - [8,42]
+      medium_start:
+        - [4,38]
+      medium_end:
+        - [5,48]
+      medium_validation_start:
+        - [5,56]
+      medium_validation_end:
+        - [6,33]
+      fast_start:
+        - [1,57]
+      fast_end:
+        - [3,10]
+      fast_validation_start:
+        - [3,46]
+      fast_validation_end:
+        - [4,23]
+
+############## End of Slippage Data UNR ##############

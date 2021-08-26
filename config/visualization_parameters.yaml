@@ -12,11 +12,12 @@ visualization:
   end_time: 
     - 1
     - 0
+  run_for_all_frames: True
   use_vedb_gaze_pipeline: False
   pupil_labs_output_id: 0
   save_world_output: True
   save_eye_output: True
-  world_scale: 0.25
+  world_scale: 0.5
   eye_scale: 0.5
   eye_fps_scale: 4
   marker_size: 4
@@ -25,7 +26,7 @@ visualization:
 
 
 directory:
-  session_directory: "/home/kamran/temp_sync/vedbcloud0/staging/"
-  gaze_directory:  "/home/kamran/temp_sync/vedbcloud0/processed/gaze_pilot/"
-  saving_directory: "/home/kamran/temp_sync/vedbcloud0/processed/visualization/"
+  session_directory: "/hdd01/kamran_sync/staging/"
+  gaze_directory:  "/hdd01/kamran_sync/processed/gaze_pilot/"
+  saving_directory: "/hdd01/kamran_sync/processed/visualization/"
   cumulative_gaze_file: "/home/kamran/Desktop/gaze_accuracy.npz"
