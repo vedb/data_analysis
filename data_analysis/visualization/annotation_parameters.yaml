@@ -2,7 +2,7 @@ version: 0.0.1
 
 annotation:
   # Options are pupil, iris, upper, lower
-  eye_part: "pupil"
+  eye_part: "upper"
   upper_skin_color: "grey"
   lower_skin_color: "grey"
   skin_color: "grey"
@@ -12,5 +12,5 @@ annotation:
 
 
 directory:
-  image_directory: "/hdd01/eye_images/test_folder_2/"
-  saving_directory: "/home/kamran/Downloads/eye_image_annotation_results/batch_1/"
+  image_directory: "/hdd01/eye_images/2021_07_13_15_27_51/"
+  saving_directory: "/hdd01/eye_images/Final_eye_images/Bates_labels/"

@@ -42,9 +42,9 @@ def create_fits(text_files, image_path, count):
                 w, h = [x for x in next(f).split()]  # read first line
                 array = []
                 for line in f:  # read rest of lines
-                    array.append([np.float(x) for x in line.split(',')])
-            _x = [np.float(x[0]) for x in array]
-            _y = [np.float(x[1]) for x in array]
+                    array.append([np.float64(x) for x in line.split(',')])
+            _x = [np.float64(x[0]) for x in array]
+            _y = [np.float64(x[1]) for x in array]
             # ax.sc(_x, previous_y, c=colors[i], marker='x', label=tags[i])
             # plt.scatter(x=_x, y=_y, c=colors[i], marker='x', label=tags[i])
             if 'pupil' in txt_file:
@@ -135,11 +135,11 @@ def create_fits(text_files, image_path, count):
     image_from_plot = image_from_plot.reshape(fig.canvas.get_width_height()[::-1] + (3,))
     base = os.path.basename(image_path)
     image_file_name = os.path.splitext(base)[0]
-    label_file_name = saving_directory + image_file_name + '_label.png'
+    label_file_name = saving_directory + "/all_labels/" + image_file_name + '_label.png'
     cv2.imwrite(label_file_name, a)
     input_image = cv2.imread(image_path)
     final_frame = np.concatenate((input_image, a), axis=1)
-    label_file_name = saving_directory + image_file_name + '_label_&_input.png'
+    label_file_name = saving_directory + "/all_labels/" + image_file_name + '_label_&_input.png'
     cv2.imwrite(label_file_name, final_frame)
     # fig, ax = plt.subplots(figsize=(10, 10))
     # ax.imshow(final_frame)
