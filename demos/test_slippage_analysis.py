@@ -5,7 +5,7 @@ import yaml
 from data_analysis import scene
 # Directory for the recording sessions
 parameters_fpath = "/home/kamran/Code/data_analysis/config/visualization_parameters.yaml"
-sessions_fpath = "/home/kamran/Code/data_analysis/config/sessions_list.yaml"
+sessions_fpath = "/home/kamran/Code/data_analysis/config/slippage_sessions_list.yaml"
 def parse_pipeline_parameters(parameters_fpath):
     param_dict = dict()
     with open(parameters_fpath,"r") as stream:
