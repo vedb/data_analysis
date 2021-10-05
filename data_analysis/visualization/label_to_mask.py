@@ -141,6 +141,7 @@ def create_fits(text_files, image_path, count):
     final_frame = np.concatenate((input_image, a), axis=1)
     label_file_name = saving_directory + "/all_labels/" + image_file_name + '_label_&_input.png'
     cv2.imwrite(label_file_name, final_frame)
+    plt.close(fig)
     # fig, ax = plt.subplots(figsize=(10, 10))
     # ax.imshow(final_frame)
     # cv2.imshow("Input Vs. Label", final_frame)
@@ -158,9 +159,11 @@ def label_to_mask(image_directory, saving_directory, param_dict):
         image_file_name = os.path.splitext(base)[0]
         files_missing = []
         pupil_points_file_name = saving_directory + image_file_name + '_pupil_points.txt'
+        # pupil_points_file_name = saving_directory + "image_eye_output" + image_file_name + '_pupil_points.txt'
         iris_points_file_name = saving_directory + image_file_name + '_iris_points.txt'
-        upper_points_file_name = saving_directory + image_file_name + '_upper_points.txt'
-        lower_points_file_name = saving_directory + image_file_name + '_lower_points.txt'
+        # upper_points_file_name = saving_directory + image_file_name + '_upper_points.txt'
+        upper_points_file_name = saving_directory + "image_eye_output" + image_file_name + '_upper_points.txt'
+        lower_points_file_name = saving_directory + "image_eye_output" + image_file_name + '_lower_points.txt'
         text_files = [pupil_points_file_name, iris_points_file_name, upper_points_file_name, lower_points_file_name]
         for txt_file in text_files:
             if not os.path.exists(txt_file):

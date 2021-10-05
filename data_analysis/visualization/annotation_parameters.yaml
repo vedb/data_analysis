@@ -12,5 +12,5 @@ annotation:
 
 
 directory:
-  image_directory: "/hdd01/eye_images/2021_07_13_15_27_51/"
+  image_directory: "/hdd01/eye_images/2021_07_05_15_25_46/"
   saving_directory: "/hdd01/eye_images/Final_eye_images/Bates_labels/"
