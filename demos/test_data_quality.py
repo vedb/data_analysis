@@ -9,6 +9,7 @@ from tqdm import tqdm
 from pupil_recording_interface.externals.circle_detector import find_pupil_circle_marker
 import matplotlib.pyplot as plt
 from pathlib import Path
+import yaml
 
 class session:
     """ A light Session class to work with different streams of data in a recording session """
@@ -109,6 +110,11 @@ class session:
         self.odometry_timestamp = self.read_timestamp_np("odometry")
         self.t265_timestamp = self.read_timestamp_np("t265")
 
+def parse_pipeline_parameters(parameters_fpath):
+    param_dict = dict()
+    with open(parameters_fpath,"r") as stream:
+        param_dict = yaml.safe_load(stream)
+    return param_dict
 
 def plot_average_eye_images(mean_image_0, mean_image_1, path):
     fig, axs = plt.subplots(nrows=1, ncols=2)
@@ -486,10 +492,12 @@ def run_marker_detection_1(session, frame_range=(0, 500), skip_frame=4, scale=0.
 
 if __name__ == "__main__":
 
-    # session_path = "/hdd01/kamran_sync/staging/2021_09_28_17_25_20/"
+    path_up = os.path.dirname(os.getcwd())
+    config_file_name = path_up + "/config/visualization_parameters.yaml"
+    param_dict = parse_pipeline_parameters(config_file_name)
     session_path = input("Please copy and paste the session directory here:")
     my_session = session(session_path)
-    N = 1000
+    N = param_dict['visualization']['number_of_eye_frames']
     pupil_dataframe, mean_image_0, mean_image_1 = run_pupil_detection_PL(session=my_session, number_of_frames=N)
 
     print("\n\n Running Circle Detection ...\n\n")
