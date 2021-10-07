@@ -34,7 +34,7 @@ MANIFEST
 *.spec
 
 # yaml files
-*.yaml
+/config/*
 
 # Installer logs
 pip-log.txt
