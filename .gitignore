@@ -34,7 +34,7 @@ MANIFEST
 *.spec
 
 # yaml files
-/config/*
+/data_analysis/config/*
 
 # Installer logs
 pip-log.txt
