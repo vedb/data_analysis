@@ -23,6 +23,7 @@ visualization:
   marker_size: 4
   marker_color: cyan
   eye_index : binocular
+  number_of_eye_frames : 1500
 
 
 directory:

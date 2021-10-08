@@ -7,7 +7,9 @@ import os
 import pandas as pd
 from tqdm import tqdm
 from pupil_recording_interface.externals.circle_detector import find_pupil_circle_marker
-
+import matplotlib.pyplot as plt
+from pathlib import Path
+import yaml
 
 class session:
     """ A light Session class to work with different streams of data in a recording session """
@@ -108,6 +110,139 @@ class session:
         self.odometry_timestamp = self.read_timestamp_np("odometry")
         self.t265_timestamp = self.read_timestamp_np("t265")
 
+def parse_pipeline_parameters(parameters_fpath):
+    param_dict = dict()
+    with open(parameters_fpath,"r") as stream:
+        param_dict = yaml.safe_load(stream)
+    return param_dict
+
+def plot_average_eye_images(mean_image_0, mean_image_1, path):
+    fig, axs = plt.subplots(nrows=1, ncols=2)
+    fig.set_figheight(10)
+    fig.set_figwidth(10)
+    axs[0].set_title("Right Eye Average Image", fontsize=18)
+    axs[0].imshow(mean_image_0, cmap='Greys')
+    axs[0].tick_params(axis='x', labelsize=14)
+    axs[0].tick_params(axis='y', labelsize=14)
+    axs[1].set_title("Left Eye Average Image", fontsize=18)
+    axs[1].imshow(mean_image_1, cmap='Greys')
+    axs[1].tick_params(axis='x', labelsize=14)
+    axs[1].tick_params(axis='y', labelsize=14)
+    saving_directory = path + "/data_quality_checks"
+    file_name = os.path.join(saving_directory, "average_eye_images.png")
+    print("Saving image to: {}".format(file_name))
+    Path(saving_directory).mkdir(parents=True, exist_ok=True)
+    plt.savefig(file_name, dpi=120, facecolor="white")
+    plt.show()
+    plt.close('all')
+
+
+def plot_pupil_confidence(pupil_dataframe, path):
+    fig, axs = plt.subplots(nrows=2, ncols=1, sharex=True)
+    fig.set_figheight(10)
+    fig.set_figwidth(10)
+    eye0_df = pupil_dataframe.groupby("eye_id").get_group(0)
+    eye1_df = pupil_dataframe.groupby("eye_id").get_group(1)
+    axs[0].set_title("Right Pupil Confidence", fontsize=18)
+    axs[0].scatter(eye0_df["eye_index"] / 7200.0, eye0_df["confidence"].values, color='orange', alpha=0.7)
+    axs[0].grid(True)
+    axs[0].tick_params(axis='x', labelsize=14)
+    axs[0].tick_params(axis='y', labelsize=14)
+    axs[0].set_xlabel("Time (minutes)", fontsize=14)
+    axs[0].set_ylabel("Confidence", fontsize=14)
+    axs[1].set_title("Left Pupil Confidence", fontsize=18)
+    axs[1].scatter(eye1_df["eye_index"] / 7200.0, eye1_df["confidence"].values, color='blue', alpha=0.7)
+    axs[1].grid(True)
+    axs[1].tick_params(axis='x', labelsize=14)
+    axs[1].tick_params(axis='y', labelsize=14)
+    axs[1].set_xlabel("Time (minutes)", fontsize=14)
+    axs[1].set_ylabel("Confidence", fontsize=14)
+    saving_directory = path + "/data_quality_checks"
+    file_name = os.path.join(saving_directory, "pupil_confidence.png")
+    print("Saving image to: {}".format(file_name))
+    Path(saving_directory).mkdir(parents=True, exist_ok=True)
+    plt.savefig(file_name, dpi=120, facecolor="white")
+    plt.show()
+    plt.close('all')
+
+
+def plot_all_fps(session):
+    all_ts = [[session.world_timestamp, session.eye0_timestamp, session.eye1_timestamp],
+              [session.odometry_timestamp, session.gyro_timestamp, session.accel_timestamp]]
+    all_titles = [["world_timestamp", "eye0_timestamp", "eye1_timestamp"],
+                  ["odometry_timestamp", "gyro_timestamp", "accel_timestamp"]]
+    all_bins = [[80, 30, 30],
+                [250, 250, 130]]
+    all_range = [[50, 150, 150],
+                 [250, 250, 130]]
+
+    nrows = 2
+    ncols = 3
+    fig, axs = plt.subplots(nrows=nrows, ncols=ncols)
+    fig.set_figheight(10)
+    fig.set_figwidth(15)
+    for i in range(nrows):
+        for j in range(ncols):
+            a = np.diff(all_ts[i][j])
+            ts = a[a > 0]
+            axs[i, j].hist(1 / ts, bins=all_bins[i][j], density=True, color='green')
+            axs[i, j].set_title(all_titles[i][j], fontsize=16)
+            axs[i, j].set_xlim([0, all_range[i][j]])
+            axs[i, j].grid(True)
+            axs[i, j].tick_params(axis='x', labelsize=12)
+            axs[i, j].tick_params(axis='y', labelsize=12)
+            axs[i, j].set_xlabel("FPS", fontsize=12)
+            axs[i, j].set_ylabel("Probability", fontsize=12)
+
+    saving_directory = session.session_path + "/data_quality_checks"
+    file_name = os.path.join(saving_directory, "all_fps.png")
+    print("Saving image to: {}".format(file_name))
+    Path(saving_directory).mkdir(parents=True, exist_ok=True)
+    plt.savefig(file_name, dpi=120, facecolor="white")
+    plt.show()
+    plt.close('all')
+
+
+def plot_marker_position(world_dataframe_cal, world_dataframe_val, path):
+    fig, axs = plt.subplots(nrows=1, ncols=2, sharey=True)
+    fig.set_figheight(10)
+    fig.set_figwidth(10)
+    axs[0].set_title("Calibration Marker Positions", fontsize=18)
+    axs[0].scatter(world_dataframe_cal["cal_norm_pos_x"], world_dataframe_cal["cal_norm_pos_y"], c="orange",
+                   edgecolors='k', s=58, alpha=0.9)
+    axs[0].grid(True)
+    axs[0].set_xlim([0, 1])
+    axs[0].set_ylim([0, 1])
+    axs[0].set_aspect('equal')
+    axs[0].tick_params(axis='x', labelsize=14)
+    axs[0].tick_params(axis='y', labelsize=14)
+    axs[0].set_xlabel("Norm Pixel X", fontsize=12)
+    axs[0].set_ylabel("Norm Pixel Y", fontsize=12)
+
+    axs[1].set_title("Validation Marker Positions", fontsize=18)
+    axs[1].scatter(world_dataframe_val["val_norm_pos_x"], world_dataframe_val["val_norm_pos_y"], c="cyan",
+                   edgecolors='k', s=58, alpha=0.9)
+    axs[1].grid(True)
+    axs[1].set_xlim([0, 1])
+    axs[1].set_ylim([0, 1])
+    axs[1].set_aspect('equal')
+    axs[1].tick_params(axis='x', labelsize=14)
+    axs[1].tick_params(axis='y', labelsize=14)
+    axs[1].set_xlabel("Norm Pixel X", fontsize=12)
+    axs[1].set_ylabel("Norm Pixel Y", fontsize=12)
+    saving_directory = path + "/data_quality_checks"
+    file_name = os.path.join(saving_directory, "marker_positions.png")
+    print("Saving image to: {}".format(file_name))
+    Path(saving_directory).mkdir(parents=True, exist_ok=True)
+    plt.savefig(file_name, dpi=120, facecolor="white")
+    plt.show()
+    plt.close('all')
+
+def plot_data_quality(session, pupil_dataframe, mean_image_0, mean_image_1, world_dataframe_cal, world_dataframe_val):
+    plot_average_eye_images(mean_image_0, mean_image_1, session.session_path)
+    plot_pupil_confidence(pupil_dataframe, session.session_path)
+    plot_all_fps(session)
+    plot_marker_position(world_dataframe_cal, world_dataframe_val, session.session_path)
 
 def run_pupil_detection_PL(session, number_of_frames=250):
     pupil_dict_keys = ["pupil_timestamp", "eye_index", "world_index", "eye_id", "confidence", "norm_pos_x",
@@ -152,6 +287,13 @@ def run_pupil_detection_PL(session, number_of_frames=250):
             img_0 = img_0[:, :, 0]
         if np.ndim(img_1) == 3:
             img_1 = img_1[:, :, 0]
+        if count == 0:
+            prev_frame_0 = np.array(img_0, dtype=np.float64)
+            prev_frame_1 = np.array(img_1, dtype=np.float64)
+        else:
+            sum_0 = (img_0 + prev_frame_0)/2.0
+            sum_1 = (img_1 + prev_frame_1)/2.0
+
         pupil0_dict_2d = detector_2D.detect(np.ascontiguousarray(img_0))
         df["pupil_timestamp"].loc[count] = eye0_timestamp[frame_index]
         df["eye_index"].loc[count] = int(frame_index)
@@ -188,10 +330,10 @@ def run_pupil_detection_PL(session, number_of_frames=250):
     session.close_video_cv2("eye1")
     cv2.destroyAllWindows()
     print("\nDone!")
-    return df
+    return df, sum_0, sum_1
 
 
-def run_marker_detection_0(session, frame_range, skip_frame=4, scale=0.5):
+def run_marker_detection_0(session, frame_range=(0,500), skip_frame=4, scale=0.5):
     """Use opencv to detect calibration and validation patterns"""
 
     world_dict_keys = ["world_timestamp", "world_index", "eye_index", "method",
@@ -209,7 +351,7 @@ def run_marker_detection_0(session, frame_range, skip_frame=4, scale=0.5):
 
     max_frame_number = int(world_video.get(cv2.CAP_PROP_FRAME_COUNT)) - 10
     world_image_indexes = np.arange(frame_range[0], frame_range[1], skip_frame)
-    df = pd.DataFrame(columns=world_dict_keys, index=np.arange(len(world_image_indexes)), dtype=np.float64)
+    df = pd.DataFrame(columns=world_dict_keys, index=world_image_indexes, dtype=np.float64)
     print("Running calibration marker detection for {} world video frames".format(len(world_image_indexes)))
     count = 0
     t = tqdm(world_image_indexes, desc="Frame Count", leave=True)
@@ -231,25 +373,25 @@ def run_marker_detection_0(session, frame_range, skip_frame=4, scale=0.5):
             for e in ellipses:
                 this_circle = {}
                 ellipse_centers = np.array([e[0] for e in ellipses])
-                df["cal_location_x"].loc[count] = ellipse_centers.mean(0).tolist()[0]
-                df["cal_location_y"].loc[count] = ellipse_centers.mean(0).tolist()[1]
-                df["cal_norm_pos_x"].loc[count] = ellipse_centers.mean(0).tolist()[0] / hdim
-                df["cal_norm_pos_y"].loc[count] = ellipse_centers.mean(0).tolist()[1] / vdim
+                df.loc[count, "cal_location_x"] = ellipse_centers.mean(0).tolist()[0]
+                df.loc[count, "cal_location_y"] = ellipse_centers.mean(0).tolist()[1]
+                df.loc[count, "cal_norm_pos_x"] = ellipse_centers.mean(0).tolist()[0] / hdim
+                df.loc[count, "cal_norm_pos_y"] = ellipse_centers.mean(0).tolist()[1] / vdim
 
                 ellipse_radii = np.array([e[1] for e in ellipses])
-                df["cal_size"].loc[count] = ellipse_radii.max(0)[0]
-                df["world_timestamp"].loc[count] = world_timestamp[frame_index]
+                df.loc[count, "cal_size"] = ellipse_radii.max(0)[0]
+                df.loc[count, "world_timestamp"] = world_timestamp[frame_index]
 
-                ref_pixel_x = int(df["cal_location_x"].loc[count])
-                ref_pixel_y = int(df["cal_location_y"].loc[count])
+                ref_pixel_x = int(df.loc[count, "cal_location_x"])
+                ref_pixel_y = int(df.loc[count, "cal_location_y"])
+                df.loc[count, "method"] = detection_method
                 img = cv2.circle(img, (ref_pixel_x, ref_pixel_y), 8, (200, 25, 205), 2)
                 frame = img
                 count = count + 1
-            count = count + 1
 
         t.set_description("Frame Count")
         t.refresh()  # to show immediately the update
-        cv2.imshow('Frame', frame)
+        cv2.imshow('Scene Circle Detection', frame)
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
     # # print('\nDone!')
@@ -267,7 +409,7 @@ def run_marker_detection_0(session, frame_range, skip_frame=4, scale=0.5):
     return df
 
 
-def run_marker_detection_1(session, frame_range=(1, 2), skip_frame=4, scale=0.5):
+def run_marker_detection_1(session, frame_range=(0, 500), skip_frame=4, scale=0.5):
     """Use opencv to detect calibration and validation patterns"""
 
     checkerboard_size = (6, 8)
@@ -289,7 +431,7 @@ def run_marker_detection_1(session, frame_range=(1, 2), skip_frame=4, scale=0.5)
 
     max_frame_number = int(world_video.get(cv2.CAP_PROP_FRAME_COUNT)) - 10
     world_image_indexes = np.arange(frame_range[0], frame_range[1], skip_frame)
-    df = pd.DataFrame(columns=world_dict_keys, index=np.arange(len(world_image_indexes)), dtype=np.float64)
+    df = pd.DataFrame(columns=world_dict_keys, index=world_image_indexes, dtype=np.float64)
     print("Running validation marker detection for {} world video frames".format(len(world_image_indexes)))
     count = 0
     t = tqdm(world_image_indexes, desc="Frame Count", leave=True)
@@ -317,21 +459,21 @@ def run_marker_detection_1(session, frame_range=(1, 2), skip_frame=4, scale=0.5)
             corners[:, 0] = corners[:, 0] * (1 / scale)
             corners[:, 1] = corners[:, 1] * (1 / scale)
             marker_position = np.mean(corners, axis=0)
-            df["world_timestamp"].loc[count] = world_timestamp[frame_index]
-            df["world_index"].loc[count] = frame_index
-            df["method"].loc[count] = detection_method
-            df["val_location_x"].loc[count] = marker_position[0]
-            df["val_location_y"].loc[count] = marker_position[1]
+            df.loc[count, "world_timestamp"] = world_timestamp[frame_index]
+            df.loc[count, "world_index"] = frame_index
+            df.loc[count, "method"] = detection_method
+            df.loc[count, "val_location_x"] = marker_position[0]
+            df.loc[count, "val_location_y"] = marker_position[1]
             corners[:, 0] = corners[:, 0] * (scale / hdim)
             corners[:, 1] = corners[:, 1] * (scale / vdim)
             marker_position = np.mean(corners, axis=0)
-            df["val_norm_pos_x"].loc[count] = marker_position[0]
-            df["val_norm_pos_y"].loc[count] = marker_position[1]
+            df.loc[count, "val_norm_pos_x"] = marker_position[0]
+            df.loc[count, "val_norm_pos_y"] = marker_position[1]
             count = count + 1
 
         t.set_description("Frame Count (Found %i)" % ret)
         t.refresh()  # to show immediately the update
-        cv2.imshow('Frame', frame)
+        cv2.imshow('Scene Checkerboard Detection', frame)
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
     # # print('\nDone!')
@@ -350,20 +492,37 @@ def run_marker_detection_1(session, frame_range=(1, 2), skip_frame=4, scale=0.5)
 
 if __name__ == "__main__":
 
-    session_path = "/hdd01/kamran_sync/staging/2021_09_28_17_25_20/"
+    path_up = os.path.dirname(os.getcwd())
+    config_file_name = path_up + "/config/visualization_parameters.yaml"
+    param_dict = parse_pipeline_parameters(config_file_name)
+    session_path = input("Please copy and paste the session directory here:")
     my_session = session(session_path)
-    N = 50
-    pupil_dataframe = run_pupil_detection_PL(session=my_session, number_of_frames=N)
+    N = param_dict['visualization']['number_of_eye_frames']
+    pupil_dataframe, mean_image_0, mean_image_1 = run_pupil_detection_PL(session=my_session, number_of_frames=N)
 
     print("\n\n Running Circle Detection ...\n\n")
-    start_index = 60*30*int(input("Please enter start time(minutes):"))
-    end_index = 60*30*int(input("Please enter end time(minutes):"))
+    raw_input = input("Please enter start time as minutes, sec:")
+    (minutes, seconds) = tuple(map(int, raw_input.split(',')))
+    start_index = 60 * 30 * int(minutes) + 30 * int(seconds)
+    raw_input = input("Please enter end time as minutes, sec:")
+    (minutes, seconds) = tuple(map(int, raw_input.split(',')))
+    end_index = 60 * 30 * int(minutes) + 30 * int(seconds)
     scale = 0.5
-    world_dataframe_cal = run_marker_detection_0(session=my_session, frame_range=(start_index, end_index), skip_frame=8, scale=scale)
+    world_dataframe_cal = run_marker_detection_0(session=my_session, frame_range=(start_index, end_index), skip_frame=15, scale=scale)
 
-
+    # Fix me: Something goes wrong with the video closing that the session needs to be re-instantiated
+    my_session = session(session_path)
     print("\n\n Running Checkerboard Detection ...\n\n")
-    start_index = 60*30*int(input("Please enter start time(minutes):"))
-    end_index = 60*30*int(input("Please enter end time(minutes):"))
+    raw_input = input("Please enter start time as minutes, sec:")
+    (minutes, seconds) = tuple(map(int, raw_input.split(',')))
+    start_index = 60 * 30 * int(minutes) + 30 * int(seconds)
+    raw_input = input("Please enter end time as minutes, sec:")
+    (minutes, seconds) = tuple(map(int, raw_input.split(',')))
+    end_index = 60 * 30 * int(minutes) + 30 * int(seconds)
     scale = 0.5
-    world_dataframe_val = run_marker_detection_1(session=my_session, frame_range=(start_index, end_index), skip_frame=8, scale=scale)
+    world_dataframe_val = run_marker_detection_1(session=my_session, frame_range=(start_index, end_index), skip_frame=15, scale=scale)
+
+    # Fix me: Something goes wrong with the video closing that the session needs to be re-instantiated
+    my_session = session(session_path)
+    my_session.read_all_timestamps()
+    plot_data_quality(my_session, pupil_dataframe, mean_image_0, mean_image_1, world_dataframe_cal, world_dataframe_val)
