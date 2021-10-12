@@ -71,9 +71,13 @@ def detect_checkerboard(path, checkerboard_size, scale, start_seconds, end_secon
             ret, img = cap.read()
             if ret:
                 # img = cv2.medianBlur(img, 3)
-                kernel = np.ones((7, 7), np.uint8)
+                # kernel = np.ones((7, 7), np.uint8)
+                # for Bates videos
+                kernel = np.ones((3, 3), np.uint8)
                 img = cv2.erode(img, kernel, iterations=1)
-                img[1100:1536,:, :] = [100, 100, 100]
+                # img[1100:1536,:, :] = [100, 100, 100]
+                # for Bates videos
+                img[0:700, :, :] = [100, 100, 100]
                 img = cv2.resize(img, None, fx=scale_x, fy=scale_y)
                 gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
@@ -90,7 +94,21 @@ def detect_checkerboard(path, checkerboard_size, scale, start_seconds, end_secon
                 img[dst > 0.2 * dst.max()] = [0, 0, 225]
                 corners_x = np.where(img[:,:,2] == 225)[0]
                 corners_y = np.where(img[:, :, 2] == 225)[1]
-                if(len(corners_x)>4000 and max(corners_x)<1400 and max(corners_y)<1400) and np.std(corners_x)<100 and np.std(corners_y)<100:
+
+                # for Bates videos
+                corners_x = corners_x[corners_x<800]
+                corners_y = corners_y[corners_x<800]
+                corners_x = corners_x[corners_x>300]
+                corners_y = corners_y[corners_x>300]
+
+                corners_x = corners_x[corners_y<700]
+                corners_y = corners_y[corners_y<700]
+                corners_x = corners_x[corners_y>400]
+                corners_y = corners_y[corners_y>400]
+                if (len(corners_x) > 4000 and max(corners_x) < 1400 and max(corners_y) < 1400) and np.std(
+                        corners_x) < 100 and np.std(corners_y) < 100:
+                # for Bates videos
+                # if(len(corners_x)>1000 and max(corners_x)<2400 and max(corners_y)<1500) and np.std(corners_x)<1000 and np.std(corners_y)<1000:
                     # print('Yes', corners_x.shape, corners_y.shape)# , np.std(corners_x), np.std(corners_y)
                     print('Yes', [np.mean(corners_x*(1/scale)), np.mean(corners_y*(1/scale))])
                     img = cv2.circle(

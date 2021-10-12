@@ -33,6 +33,9 @@ MANIFEST
 *.manifest
 *.spec
 
+# yaml files
+/data_analysis/config/*
+
 # Installer logs
 pip-log.txt
 pip-delete-this-directory.txt
