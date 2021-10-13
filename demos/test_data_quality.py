@@ -316,8 +316,10 @@ def run_pupil_detection_PL(session, number_of_frames=250):
             prev_frame_0 = np.array(img_0, dtype=np.float64)
             prev_frame_1 = np.array(img_1, dtype=np.float64)
         else:
-            sum_0 = (img_0 + prev_frame_0)/2.0
-            sum_1 = (img_1 + prev_frame_1)/2.0
+            if(pupil0_dict_2d["confidence"]) > 0.5:
+                sum_0 = (img_0 + prev_frame_0)/2.0
+            if (pupil1_dict_2d["confidence"]) > 0.5:
+                sum_1 = (img_1 + prev_frame_1)/2.0
 
         pupil0_dict_2d = detector_2D.detect(np.ascontiguousarray(img_0))
         df["pupil_timestamp"].loc[count] = eye0_timestamp[frame_index]

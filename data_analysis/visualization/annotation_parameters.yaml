@@ -12,5 +12,5 @@ annotation:
 
 
 directory:
-  image_directory: "/hdd01/eye_images/2021_07_05_15_25_46/"
-  saving_directory: "/hdd01/eye_images/Final_eye_images/Bates_labels/"
+  image_directory: "/home/veddy06/Downloads/S5_shade/"
+  saving_directory: "/home/veddy06/Downloads/S5_shade_output/"
