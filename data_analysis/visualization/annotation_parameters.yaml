@@ -12,5 +12,6 @@ annotation:
 
 
 directory:
-  image_directory: "/home/veddy06/Downloads/S5_shade/"
-  saving_directory: "/home/veddy06/Downloads/S5_shade_output/"
+  image_directory: "/home/veddy06/Downloads/2021_07_05_13_09_00_raw/"
+  saving_directory: "/home/veddy06/Downloads/2021_07_05_13_09_00_mask/"
+  label_directory: "/home/veddy06/Downloads/2021_07_05_13_09_00_label/"
