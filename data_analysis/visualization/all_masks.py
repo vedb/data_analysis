@@ -6,11 +6,34 @@ from glob import glob
 import sys
 import copy
 
-def create_label(raw_image_path, label_image_path):
+
+def create_label(raw_image_path, label_image_path, param_dict):
+
+    saving_directory_mask = param_dict['directory']['saving_directory_mask']
+    saving_directory_array = param_dict['directory']['saving_directory_array']
     raw_image = cv2.imread(raw_image_path)
     label_image = cv2.imread(label_image_path)
-    final_mask = np.zeros(label_image.shape, dtype=np.float64)
-    c = np.zeros(label_image.shape, dtype=np.float64)
+    final_mask = np.zeros(label_image.shape, dtype=np.uint8)
+    mask_color = np.zeros(label_image.shape, dtype=np.uint8)
+    mask_array = np.zeros((label_image.shape[0], label_image.shape[1]), dtype=np.uint8)
+    image_width = raw_image.shape[0]
+    image_height = raw_image.shape[1]
+    # print("pixel value: ", label_image[10][30][:])
+    for i in range(image_width):
+        for j in range(image_height):
+            if np.array_equal(label_image[i][j][:], [128, 128, 128]) or np.array_equal(label_image[i][j][:], [0, 0, 0]) or np.array_equal(label_image[i][j][:], [255, 255, 255]):
+                mask_color[i][j] = [0, 0, 0]
+                mask_array[i][j] = 0
+            elif np.array_equal(label_image[i][j][:], [255, 255, 0]):
+                mask_color[i][j] = [50, 50, 50]
+                mask_array[i][j] = 1
+            elif np.array_equal(label_image[i][j][:], [255, 0, 0]):
+                mask_color[i][j] = [100, 100, 100]
+                mask_array[i][j] = 2
+            elif np.array_equal(label_image[i][j][:], [0, 0, 255]):
+                mask_color[i][j] = [200, 200, 200]
+                mask_array[i][j] = 3
+    '''
     # final_mask = copy.deepcopy(label_image)
     # final_mask.setflags(write=1)
     # final_mask[label_image == [0, 0, 0]] = 0 # [0, 0, 0]
@@ -41,9 +64,11 @@ def create_label(raw_image_path, label_image_path):
     final_mask = np.where(label_image[:,:] == [0, 0, 255], final_mask, [200,200,200])
     # c = np.tile([200., 200., 200.],[idx.shape[0],idx.shape[1],1])
     # final_mask[idx[0]][:,idx[1]] = c[idx[0]][:,idx[1]] + 200
+    '''
+    final_mask = mask_color
     colors = np.unique(label_image.reshape(400*400, 3), axis=0)
     tag = "{} regions:\n{}".format(len(colors), colors)
-    print(tag)
+    # print(tag)
     frame = np.concatenate((raw_image, label_image), axis=1)
     font = cv2.FONT_HERSHEY_PLAIN
     frame = cv2.putText(frame, str(len(colors))+" regions", (450, 50), font, 1.5, [250,50,0], 2, cv2.LINE_AA)
@@ -52,23 +77,22 @@ def create_label(raw_image_path, label_image_path):
     cv2.imshow("Mask", final_mask.astype(np.uint8))
     base = os.path.basename(raw_image_path)
     mask_file_name = os.path.splitext(base)[0]
-    file_name = saving_directory + mask_file_name + "_mask.png"
-    print(file_name)
+    file_name = saving_directory_mask + mask_file_name + "_mask.png"
+    # print(file_name)
     cv2.imwrite(file_name, final_mask.astype(np.uint8))
-    if cv2.waitKey(4000) & 0xFF == ord("q"):
+    file_name = saving_directory_array + mask_file_name + "_array.npy"
+    np.save(file_name, mask_array)
+    if cv2.waitKey(500) & 0xFF == ord("q"):
         return True
     # cv2.destroyAllWindows()
     return True
 
 
-def all_labels(image_directory,
-               saving_directory,
-               label_directory,
-               param_dict):
+def all_labels(image_directory, label_directory, param_dict):
+
     images_paths = sorted(glob(os.path.join(image_directory, '*png')))
-    # annotation_paths = glob(os.path.join(saving_directory, '*txt'))
     i = 0
-    for image_path in images_paths[0:20]:
+    for image_path in images_paths:
         print("Running Label Generation for: {} ID: {}/{}".format(os.path.basename(image_path), i, len(images_paths)))
         base = os.path.basename(image_path)
         image_file_name = os.path.splitext(base)[0]
@@ -85,7 +109,9 @@ def all_labels(image_directory,
             continue
         i = i + 1
 
-        result = create_label(image_path, label_image_file_name)
+        result = create_label(raw_image_path=image_path,
+                              label_image_path=label_image_file_name,
+                              param_dict=param_dict)
     cv2.destroyAllWindows()
     return result
 
@@ -103,9 +129,9 @@ if __name__ == '__main__':
     parameters_fpath = os.getcwd() + "/annotation_parameters.yaml"
     param_dict = parse_pipeline_parameters(parameters_fpath)
     image_directory = param_dict['directory']['image_directory']
-    saving_directory = param_dict['directory']['saving_directory']
     label_directory = param_dict['directory']['label_directory']
     print(param_dict)
-    all_labels(image_directory=image_directory, saving_directory=saving_directory, label_directory=label_directory,
+    all_labels(image_directory=image_directory,
+               label_directory=label_directory,
                param_dict=param_dict)
     sys.exit(0)
