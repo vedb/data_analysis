@@ -2,6 +2,7 @@ import os
 import numpy as np
 import cv2
 
+
 class Session:
     """ A light Session class to work with different streams of data in a recording session """
 
@@ -67,7 +68,6 @@ class Session:
         return (frame_width, frame_height)
 
     def video_total_frame_count_cv2(self, video):
-
         return int(video.get(cv2.CAP_PROP_FRAME_COUNT))
 
     def close_video_cv2(self, video_name):
