@@ -8,7 +8,7 @@ class Session:
 
     def __init__(self, path):
         self.session_path = path
-        print("Session file Created for: {}".format(os.path.basename(os.path.dirname(path))))
+        print("Session Object Created for: {}".format(os.path.basename(os.path.dirname(path))))
         self.world_video_file = os.path.join(path, "world.mp4")
         self.eye0_video_file = os.path.join(path, "eye0.mp4")
         self.eye1_video_file = os.path.join(path, "eye1.mp4")
