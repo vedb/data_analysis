@@ -12,7 +12,7 @@ annotation:
 
 
 directory:
-  image_directory: "/home/veddy06/Downloads/2021_07_05_13_09_00_raw/"
-  saving_directory_mask: "/home/veddy06/Downloads/2021_07_05_13_09_00_mask/"
-  saving_directory_array: "/home/veddy06/Downloads/2021_07_05_13_09_00_array/"
-  label_directory: "/home/veddy06/Downloads/2021_07_05_13_09_00_label/"
+  image_directory: "/hdd01/eye_images/"
+  saving_directory_mask: "/hdd01/eye_images/Final_eye_images/Bates_labels/all_masks/"
+  saving_directory_array: "/hdd01/eye_images/Final_eye_images/Bates_labels/all_arrays/"
+  label_directory: "/hdd01/eye_images/Final_eye_images/Bates_labels/all_labels/"
