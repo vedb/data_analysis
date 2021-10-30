@@ -1,6 +1,6 @@
 import pupil_detectors
 import numpy as np
-from pupil_detectors import Detector2D, Detector3D
+from pupil_detectors import Detector2D
 from data_analysis.process import BaseProcess
 import cv2
 import pandas as pd
@@ -104,8 +104,8 @@ def run_pupil_detection_PL(session, df, number_of_frames=500):
         df["ellipse_axis_b"].loc[count] = pupil1_dict_2d["ellipse"]["axes"][1]
         df["ellipse_angle"].loc[count] = pupil1_dict_2d["ellipse"]["angle"]
         count = count + 1
-    df.to_pickle("/home/kamran/Desktop/pupil_data.pkl")
-    df.to_csv("/home/kamran/Desktop/pupil_data.csv")
+    df.to_pickle("~/Desktop/pupil_data.pkl")
+    df.to_csv("~/Desktop/pupil_data.csv")
     session.close_video_cv2("eye0")
     session.close_video_cv2("eye1")
     cv2.destroyAllWindows()

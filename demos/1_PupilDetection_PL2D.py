@@ -31,8 +31,14 @@ if __name__ == "__main__":
 
         df_index = np.arange(0, N)
         df = creat_output_data(df_index)
-        process = ProcessPupilDetection(target=run_pupil_detection_PL, name="Pupil Tracking", arguments=(my_session, df))
+        process = ProcessPupilDetection(target=run_pupil_detection_PL,
+                                        name="Pupil Tracking",
+                                        arguments=(my_session, df))
         process.start()
-        process.join()
-        print("Pupil Detection Done!: ")
-        print("Process output:\n {}".format(pd.read_pickle("/home/kamran/Desktop/pupil_data.pkl").head()))
+        # Todo: Pass a meaningful timeout to the process wait
+        process.join(5*60)
+        if process.is_alive():
+            print("Still alive, going to terminate!!")
+            process.terminate()
+        print("Pupil Detection Done!")
+        print("Process output:\n {}".format(pd.read_pickle("~/Desktop/pupil_data.pkl").head()))

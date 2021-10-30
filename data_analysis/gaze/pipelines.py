@@ -1,6 +1,6 @@
 # Calibration script
 # import vm_preproc as vmp
-import vedb_store
+# import vedb_store
 import numpy as np
 import tqdm
 import os
