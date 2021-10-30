@@ -12,5 +12,7 @@ annotation:
 
 
 directory:
-  image_directory: "/home/veddy06/Downloads/S5_shade/"
-  saving_directory: "/home/veddy06/Downloads/S5_shade_output/"
+  image_directory: "/hdd01/eye_images/"
+  saving_directory_mask: "/hdd01/eye_images/Final_eye_images/Bates_labels/all_masks/"
+  saving_directory_array: "/hdd01/eye_images/Final_eye_images/Bates_labels/all_arrays/"
+  label_directory: "/hdd01/eye_images/Final_eye_images/Bates_labels/all_labels/"
