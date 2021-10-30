@@ -1,0 +1,16 @@
+sessions:
+
+############## Sessions from UNR ##############
+    '2021_09_14_10_32_09': #'2021_04_06_18_37_22':  # Kamran, Indoor, Office work
+      rig: V1
+      calibration: True
+      validation: True
+      calibration_start:
+        - [0,4]
+      calibration_end:
+        - [1,17]
+      validation_0_start:
+        - [1,17]
+      validation_1_end:
+        - [2,24]
+############### End of Slippage Data UNR ##############
