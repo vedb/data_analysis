@@ -16,3 +16,4 @@ directory:
   saving_directory_mask: "/hdd01/eye_images/Final_eye_images/Bates_labels/all_masks/"
   saving_directory_array: "/hdd01/eye_images/Final_eye_images/Bates_labels/all_arrays/"
   label_directory: "/hdd01/eye_images/Final_eye_images/Bates_labels/all_labels/"
+  ved_dataset_directory: "/hdd01/eye_images/VED_DataSet_Backup/"
