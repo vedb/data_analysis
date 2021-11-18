@@ -16,5 +16,5 @@ output:
                      "projected_sphere_center_y", "projected_sphere_axis_a", "projected_sphere_axis_b",
                      "projected_sphere_angle"]
 directory:
-  session_directory: "/home/veddy06/recordings/"
-  gaze_directory: "/home/veddy06/Downloads/"
+  session_directory: "/hdd01/kamran_sync/staging/"
+  gaze_directory: "/hdd01/kamran_sync/processed/gaze_pilot/"

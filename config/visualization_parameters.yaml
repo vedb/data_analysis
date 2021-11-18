@@ -22,8 +22,9 @@ visualization:
   eye_fps_scale: 4
   marker_size: 4
   marker_color: cyan
-  eye_index : binocular
-  number_of_eye_frames : 1500
+  eye_index: binocular
+  number_of_eye_frames: 1500
+  number_of_world_frames: 1500
 
 
 directory:
