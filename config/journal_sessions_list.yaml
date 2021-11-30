@@ -1,179 +1,179 @@
 sessions:
 
 ############## Sessions from UNR ##############
-    '2021_07_05_15_25_46': # Allie, Indoor, Watching TV
-      rig: V1
-      calibration: True
-      validation: True
-      calibration_0_start:
-        - [0,50]
-      calibration_0_end:
-        - [1,50]
-      validation_0_start:
-        - [1,52]
-      validation_0_end:
-        - [2,40]
+#    '2021_07_05_15_25_46': # Allie, Indoor, Watching TV
+#      rig: V1
+#      calibration: True
+#      validation: True
+#      calibration_0_start:
+#        - [0,50]
+#      calibration_0_end:
+#        - [1,50]
+#      validation_0_start:
+#        - [1,52]
+#      validation_0_end:
+#        - [2,40]
+#
+#    '2021_07_05_13_09_00': # Allie, Indoor, Calibration
+#      rig: V1
+#      calibration: True
+#      validation: True
+#      calibration_0_start:
+#        - [0,18]
+#      calibration_0_end:
+#        - [0,52]
+#      validation_0_start:
+#        - [1,27]
+#      validation_0_end:
+#        - [2,50]
+#
+#    '2021_07_05_11_40_12': # Allie, Indoor, house clean up
+#      rig: V1
+#      calibration: True
+#      validation: True
+#      calibration_0_start:
+#        - [2,18]
+#      calibration_0_end:
+#        - [2,48]
+#      validation_0_start:
+#        - [1,7]
+#      validation_0_end:
+#        - [1,45]
+#
+#    '2021_06_24_12_57_27': # Matt, Outdoor, Skate boarding
+#      rig: V1
+#      calibration: True
+#      validation: True
+#      calibration_0_start:
+#        - [0,48]
+#      calibration_0_end:
+#        - [1,13]
+#      validation_0_start:
+#        - [1,16]
+#      validation_0_end:
+#        - [1,35]
+#      validation_1_start:
+#        - [5,32]
+#      validation_1_end:
+#        - [5,48]
+#      validation_2_start:
+#        - [12,44]
+#      validation_2_end:
+#        - [13,04]
+#      validation_3_start:
+#        - [16,29]
+#      validation_3_end:
+#        - [16,47]
+#      validation_4_start:
+#        - [20,20]
+#      validation_4_end:
+#        - [20,39]
+#
+#    '2021_06_24_12_27_16': # Matt, Outdoor, walking
+#      rig: V1
+#      calibration: True
+#      validation: True
+#      calibration_0_start:
+#        - [0,47]
+#      calibration_0_end:
+#        - [2,35]
+#      validation_0_start:
+#        - [2,39]
+#      validation_0_end:
+#        - [2,59]
+#      validation_1_start:
+#        - [6,17]
+#      validation_1_end:
+#        - [6,38]
+#      validation_2_start:
+#        - [17,29]
+#      validation_2_end:
+#        - [17,46]
+#      validation_3_start:
+#        - [19,32]
+#      validation_3_end:
+#        - [19,50]
+#
+#    '2021_06_24_10_28_38': # Matt, Indoor, hand work
+#      rig: V1
+#      calibration: True
+#      validation: True
+#      calibration_0_start:
+#        - [0,7]
+#      calibration_0_end:
+#        - [0,48]
+#      validation_0_start:
+#        - [0,50]
+#      validation_0_end:
+#        - [1,9]
+#      validation_1_start:
+#        - [13,1]
+#      validation_1_end:
+#        - [13,22]
+#      validation_2_start:
+#        - [23,22]
+#      validation_2_end:
+#        - [23,42]
+#      validation_3_start:
+#        - [28,50]
+#      validation_3_end:
+#        - [29,11]
 
-    '2021_07_05_13_09_00': # Allie, Indoor, Calibration
-      rig: V1
-      calibration: True
-      validation: True
-      calibration_0_start:
-        - [0,18]
-      calibration_0_end:
-        - [0,52]
-      validation_0_start:
-        - [1,27]
-      validation_0_end:
-        - [2,50]
+#    '2021_05_15_08_44_13': # Pogen, Indoor, Fusbal
+#      rig: V1
+#      calibration: True
+#      validation: True
+#      calibration_0_start:
+#        - [0,15]
+#      calibration_0_end:
+#        - [1,20]
+#      validation_0_start:
+#        - [1,29]
+#      validation_0_end:
+#        - [2,14]
 
-    '2021_07_05_11_40_12': # Allie, Indoor, house clean up
-      rig: V1
-      calibration: True
-      validation: True
-      calibration_0_start:
-        - [2,18]
-      calibration_0_end:
-        - [2,48]
-      validation_0_start:
-        - [1,7]
-      validation_0_end:
-        - [1,45]
+#    '2021_07_05_12_43_05': # making coffee, Allie
+#      rig: V1
+#      calibration: True
+#      validation: True
+#      calibration_0_start:
+#        - [2,19]
+#      calibration_0_end:
+#        - [2,54]
+#      validation_0_start:
+#        - [1,9]
+#      validation_0_end:
+#        - [2,16]
 
-    '2021_06_24_12_57_27': # Matt, Outdoor, Skate boarding
-      rig: V1
-      calibration: True
-      validation: True
-      calibration_0_start:
-        - [0,48]
-      calibration_0_end:
-        - [1,13]
-      validation_0_start:
-        - [1,16]
-      validation_0_end:
-        - [1,35]
-      validation_1_start:
-        - [5,32]
-      validation_1_end:
-        - [5,48]
-      validation_2_start:
-        - [12,44]
-      validation_2_end:
-        - [13,04]
-      validation_3_start:
-        - [16,29]
-      validation_3_end:
-        - [16,47]
-      validation_4_start:
-        - [20,20]
-      validation_4_end:
-        - [20,39]
+#    '2021_05_23_14_33_31': # Indoor board game, Mark
+#      rig: V1
+#      calibration: True
+#      validation: True
+#      calibration_0_start:
+#        - [1,12]
+#      calibration_0_end:
+#        - [2,8]
+#      validation_0_start:
+#        - [2,8]
+#      validation_0_end:
+#        - [2,59]
+#      validation_1_start:
+#        - [12,28]
+#      validation_1_end:
+#        - [13,7]
 
-    '2021_06_24_12_27_16': # Matt, Outdoor, walking
-      rig: V1
-      calibration: True
-      validation: True
-      calibration_0_start:
-        - [0,47]
-      calibration_0_end:
-        - [2,35]
-      validation_0_start:
-        - [2,39]
-      validation_0_end:
-        - [2,59]
-      validation_1_start:
-        - [6,17]
-      validation_1_end:
-        - [6,38]
-      validation_2_start:
-        - [17,29]
-      validation_2_end:
-        - [17,46]
-      validation_3_start:
-        - [19,32]
-      validation_3_end:
-        - [19,50]
-
-    '2021_06_24_10_28_38': # Matt, Indoor, hand work
-      rig: V1
-      calibration: True
-      validation: True
-      calibration_0_start:
-        - [0,7]
-      calibration_0_end:
-        - [0,48]
-      validation_0_start:
-        - [0,50]
-      validation_0_end:
-        - [1,9]
-      validation_1_start:
-        - [13,1]
-      validation_1_end:
-        - [13,22]
-      validation_2_start:
-        - [23,22]
-      validation_2_end:
-        - [23,42]
-      validation_3_start:
-        - [28,50]
-      validation_3_end:
-        - [29,11]
-
-    '2021_05_15_08_44_13': # Pogen, Indoor, Fusbal
-      rig: V1
-      calibration: True
-      validation: True
-      calibration_0_start:
-        - [0,15]
-      calibration_0_end:
-        - [1,20]
-      validation_0_start:
-        - [1,29]
-      validation_0_end:
-        - [2,14]
-
-    '2021_07_05_12_43_05': # making coffee, Allie
-      rig: V1
-      calibration: True
-      validation: True
-      calibration_0_start:
-        - [2,19]
-      calibration_0_end:
-        - [2,54]
-      validation_0_start:
-        - [1,9]
-      validation_0_end:
-        - [2,16]
-
-    '2021_05_23_14_33_31': # Indoor board game, Mark
-      rig: V1
-      calibration: True
-      validation: True
-      calibration_0_start:
-        - [1,12]
-      calibration_0_end:
-        - [2,8]
-      validation_0_start:
-        - [2,8]
-      validation_0_end:
-        - [2,59]
-      validation_1_start:
-        - [12,28]
-      validation_1_end:
-        - [13,7]
-
-    '2021_05_15_11_27_29': # Indoor game, Pogen
-      rig: V1
-      calibration: True
-      validation: True
-      calibration_0_start:
-        - [0,29]
-      calibration_0_end:
-        - [1,35]
-      validation_0_start:
-        - [1,48]
-      validation_0_end:
-        - [2,31]
+#    '2021_05_15_11_27_29': # Indoor game, Pogen
+#      rig: V1
+#      calibration: True
+#      validation: True
+#      calibration_0_start:
+#        - [0,29]
+#      calibration_0_end:
+#        - [1,35]
+#      validation_0_start:
+#        - [1,48]
+#      validation_0_end:
+#        - [2,31]
 
     '2021_04_06_18_37_22': # Indoor office, Kamran
       rig: V1
@@ -188,23 +188,39 @@ sessions:
       validation_0_end:
         - [2,23]
 
-    '2021_10_21_15_51_33': # Indoor Lab meeting, Mark
-      rig: V1
-      calibration: True
-      validation: True
-      calibration_0_start:
-        - [0,34]
-      calibration_0_end:
-        - [1,27]
-      validation_0_start:
-        - [1,35]
-      validation_0_end:
-        - [2,19]
-      validation_1_start:
-        - [19,36]
-      validation_1_end:
-        - [20,21]
+#    '2021_10_21_15_51_33': # Indoor Lab meeting, Mark
+#      rig: V1
+#      calibration: True
+#      validation: True
+#      calibration_0_start:
+#        - [0,34]
+#      calibration_0_end:
+#        - [1,27]
+#      validation_0_start:
+#        - [1,35]
+#      validation_0_end:
+#        - [2,19]
+#      validation_1_start:
+#        - [19,36]
+#      validation_1_end:
+#        - [20,21]
 
+#    '2021_11_04_13_50_30': # Outdoor Walking, Jenn (a good session to test eye contrast)
+#      rig: V1
+#      calibration: True
+#      validation: True
+#      calibration_0_start:
+#        - [0,34]
+#      calibration_0_end:
+#        - [1,27]
+#      validation_0_start:
+#        - [1,35]
+#      validation_0_end:
+#        - [2,19]
+#      validation_1_start:
+#        - [19,36]
+#      validation_1_end:
+#        - [20,21]
 
 
 ############### End of Slippage Data UNR ##############

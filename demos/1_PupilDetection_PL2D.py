@@ -45,7 +45,7 @@ if __name__ == "__main__":
                                         arguments=(my_session, df))
         process.start()
         # Todo: Pass a meaningful timeout to the process wait
-        process.join(20*60)
+        process.join(120*60)
         if process.is_alive():
             print("Still alive, going to terminate!!")
             process.terminate()

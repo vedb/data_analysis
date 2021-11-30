@@ -169,7 +169,7 @@ def plot_gaze_accuracy_contour(marker, gaze_pos, confidence, file_name, referenc
         #plt.title('Simplest default with labels')
         grid_z = scipy.interpolate.griddata(xy, z, (grid_x, grid_y), method=method)
         print(len(grid_z))
-        plt.pcolormesh(grid_x, grid_y, grid_z, cmap='YlOrRd', vmin=0, vmax=10) # ma.masked_invalid()
+        plt.pcolormesh(grid_x, grid_y, ma.masked_invalid(grid_z), cmap='YlOrRd', vmin=0, vmax=10)
         # plt.scatter(marker_pixel_x, marker_pixel_y, edgecolors='face', c=colors, s=50, cmap='YlOrRd', alpha=0.9, vmin=0,
         #             vmax=15)
         # CS = plt.contour(grid_x, grid_y, grid_z)
