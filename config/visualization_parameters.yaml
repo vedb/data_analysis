@@ -28,7 +28,12 @@ visualization:
 
 
 directory:
-  session_directory: "/hdd01/kamran_sync/staging/"
-  gaze_directory:  "/hdd01/kamran_sync/processed/gaze_pilot/"
-  saving_directory: "/hdd01/kamran_sync/processed/visualization/"
+  session_directory: "/media/veddy06/TOSHIBA EXT/UNR/"
+  gaze_directory:  "/media/veddy06/TOSHIBA EXT/gaze_pilot/"
+  saving_directory: "/media/veddy06/TOSHIBA EXT/visualization/"
   cumulative_gaze_file: "/home/kamran/Desktop/gaze_accuracy.npz"
+
+#  session_directory: "/hdd01/kamran_sync/staging/"
+#  gaze_directory:  "/hdd01/kamran_sync/processed/gaze_pilot/"
+#  saving_directory: "/hdd01/kamran_sync/processed/visualization/"
+#  cumulative_gaze_file: "/home/kamran/Desktop/gaze_accuracy.npz"
