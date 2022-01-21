@@ -75,6 +75,12 @@ logging.basicConfig(
 #     When running the script from the command line, press 'Ctrl+C' to stop the
 #     manager. When running from a Jupyter notebook, interrupt the kernel
 #     (*Kernel > Interrupt Kernel* or press 'Esc' and then twice 'i').
+updated_dict = {
+                   "Absolute Exposure Time": 5000,
+                   "Brightness": -20,
+                   "Contrast": 10,
+                   "Gamma": 100
+}
 with pri.StreamManager(configs) as manager:
     while not manager.stopped:
         if manager.all_streams_running:
@@ -82,5 +88,12 @@ with pri.StreamManager(configs) as manager:
                 "fps", format="{:.2f} Hz", max_cols=72, sleep=0.1
             )
             print("\r" + status, end="")
+        if manager.keypresses._getvalue():
+            key = manager.keypresses.popleft()
+            if key.lower() == "t":
+                # print(manager.streams["eye0"].device.capture)
+                # print(type(manager.streams["eye0"].device.capture))
+                # eye0_capture = manager.streams["eye0"].device.get_capture(f"Pupil Cam2 ID0", (400,400), 60)
+                manager.streams["eye0"].device.controls(updated_dict)
 
 print("\nStopped")
