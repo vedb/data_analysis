@@ -3,7 +3,7 @@ import cv2
 import pandas as pd
 
 
-def detect_checkerboard(path, checkerboard_size, scale, start_seconds, end_seconds):
+def detect_checkerboard(path, checkerboard_size, scale, frame_index_array, this_session):
 
     horizontal_pixels = 2048
     vertical_pixels = 1536
@@ -42,8 +42,8 @@ def detect_checkerboard(path, checkerboard_size, scale, start_seconds, end_secon
 
     # start_index = (start_seconds + safe_margin) * fps
     # end_index = (end_seconds - safe_margin) * fps
-    start_index = start_seconds
-    end_index = end_seconds
+    start_index = min(frame_index_array)
+    end_index = max(frame_index_array)
 
     print("First Frame = %d" % start_index)
     print("Last Frame = %d" % end_index)
@@ -52,9 +52,10 @@ def detect_checkerboard(path, checkerboard_size, scale, start_seconds, end_secon
 
     my_string = "-"
     marker_found = []
-    cap.set(1, 1600)
-    for count in range(0, frame_numbers):
 
+    print("\nRunning Validation Marker Detection on: {}".format(this_session['site']))
+    for count in frame_index_array: # range(0, frame_numbers):
+        cap.set(1, count)
         print(
             "Progress: {0:.1f}% {s}".format(count * 100 / frame_numbers, s=my_string),
             end="\r",
@@ -75,9 +76,14 @@ def detect_checkerboard(path, checkerboard_size, scale, start_seconds, end_secon
                 # for Bates videos
                 kernel = np.ones((3, 3), np.uint8)
                 img = cv2.erode(img, kernel, iterations=1)
-                # img[1100:1536,:, :] = [100, 100, 100]
-                # for Bates videos
-                img[0:700, :, :] = [100, 100, 100]
+                # for UNR videos
+                if(this_session['site'] == 'UNR'):
+                    img[1000:1536,:, :] = [100, 100, 100]
+                    threshold = 4000
+                else:
+                    img[0:1000,:, :] = [100, 100, 100]
+                    threshold = 300
+
                 img = cv2.resize(img, None, fx=scale_x, fy=scale_y)
                 gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
@@ -96,21 +102,22 @@ def detect_checkerboard(path, checkerboard_size, scale, start_seconds, end_secon
                 corners_y = np.where(img[:, :, 2] == 225)[1]
 
                 # for Bates videos
-                corners_x = corners_x[corners_x<800]
-                corners_y = corners_y[corners_x<800]
-                corners_x = corners_x[corners_x>300]
-                corners_y = corners_y[corners_x>300]
+                if (this_session['site'] == 'Bates'):
+                    corners_x = corners_x[corners_x<800]
+                    corners_y = corners_y[corners_x<800]
+                    corners_x = corners_x[corners_x>300]
+                    corners_y = corners_y[corners_x>300]
 
-                corners_x = corners_x[corners_y<700]
-                corners_y = corners_y[corners_y<700]
-                corners_x = corners_x[corners_y>400]
-                corners_y = corners_y[corners_y>400]
-                if (len(corners_x) > 4000 and max(corners_x) < 1400 and max(corners_y) < 1400) and np.std(
+                    corners_x = corners_x[corners_y<700]
+                    corners_y = corners_y[corners_y<700]
+                    corners_x = corners_x[corners_y>400]
+                    corners_y = corners_y[corners_y>400]
+                if (len(corners_x) > threshold and max(corners_x) < 1400 and max(corners_y) < 1400) and np.std(
                         corners_x) < 100 and np.std(corners_y) < 100:
                 # for Bates videos
                 # if(len(corners_x)>1000 and max(corners_x)<2400 and max(corners_y)<1500) and np.std(corners_x)<1000 and np.std(corners_y)<1000:
                     # print('Yes', corners_x.shape, corners_y.shape)# , np.std(corners_x), np.std(corners_y)
-                    print('Yes', [np.mean(corners_x*(1/scale)), np.mean(corners_y*(1/scale))])
+                    print('Yes', [np.mean(corners_x*(1/scale)), np.mean(corners_y*(1/scale))], corners_x.shape, corners_y.shape)
                     img = cv2.circle(
                         img,
                         (int(np.mean(corners_y)), int(np.mean(corners_x))),
@@ -122,7 +129,7 @@ def detect_checkerboard(path, checkerboard_size, scale, start_seconds, end_secon
                     imgpoints.append([np.mean(corners_x*(1/scale)), np.mean(corners_y*(1/scale))])
                     my_string = "1"
                 else:
-                    # print('No', corners_x.shape, corners_y.shape)
+                    print('No', corners_x.shape, corners_y.shape, max(corners_x), max(corners_y) )
                     # marker_found.append(False)
                     my_string = "0"
 

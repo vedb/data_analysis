@@ -4,8 +4,8 @@ import glob
 import yaml
 from data_analysis import scene
 # Directory for the recording sessions
-parameters_fpath = "/home/kamran/Code/data_analysis/config/visualization_parameters.yaml"
-sessions_fpath = "/home/kamran/Code/data_analysis/config/slippage_sessions_list.yaml"
+parameters_fpath = "/home/veddy06/Code/data_analysis/config/visualization_parameters.yaml"
+sessions_fpath = "/home/veddy06/Code/data_analysis/config/slippage_sessions_list_new.yaml"
 def parse_pipeline_parameters(parameters_fpath):
     param_dict = dict()
     with open(parameters_fpath,"r") as stream:
@@ -21,7 +21,7 @@ if __name__ == "__main__":
     # sessions = glob.glob(gaze_directory + "*")
     sessions = sessions_dict['sessions']
     print("total number of sessions", len(sessions))
-    print("all sessions: ", sessions)
+    # print("all sessions: ", sessions)
     val_points = []
     val_gaze = []
     cal_points = []
@@ -32,7 +32,7 @@ if __name__ == "__main__":
         print("running analysis for:", session_folder)
         # try:
         result = scene.pipelines.detect_markers(
-            session_directory, session_folder , param_dict)
+            session_directory, session_folder , param_dict, sessions_dict)
         # except:
         #    print("Failed for session %s " % session_folder)
         print("Gaze Calibratrion Result: ", result)

@@ -33,10 +33,45 @@ def clean_up_reference_dict(val_reference_arrays):
     return b, t
 
 
+def create_slippage_index_array(sessions_dict, session_id):
+    this_session = sessions_dict['sessions'][session_id]
+    frame_index = np.array([])
+    start_index = this_session['validation_start'][0][0] * 60 + this_session['validation_start'][0][1]
+    end_index = this_session['validation_end'][0][0] * 60 + this_session['validation_end'][0][1]
+    frame_index = np.append(frame_index, np.arange(start_index * 30, end_index * 30))
+
+    start_index = this_session['slow_validation_start'][0][0] * 60 + this_session['slow_validation_start'][0][1]
+    end_index = this_session['slow_validation_end'][0][0] * 60 + this_session['slow_validation_end'][0][1]
+    frame_index = np.append(frame_index, np.arange(start_index * 30, end_index * 30))
+
+    start_index = this_session['medium_validation_start'][0][0] * 60 + this_session['medium_validation_start'][0][1]
+    end_index = this_session['medium_validation_end'][0][0] * 60 + this_session['medium_validation_end'][0][1]
+    frame_index = np.append(frame_index, np.arange(start_index * 30, end_index * 30))
+
+    start_index = this_session['fast_validation_start'][0][0] * 60 + this_session['fast_validation_start'][0][1]
+    end_index = this_session['fast_validation_end'][0][0] * 60 + this_session['fast_validation_end'][0][1]
+    frame_index = np.append(frame_index, np.arange(start_index * 30, end_index * 30))
+
+    start_index = this_session['slow_start'][0][0] * 60 + this_session['slow_start'][0][1]
+    end_index = this_session['slow_end'][0][0] * 60 + this_session['slow_end'][0][1]
+    frame_index = np.append(frame_index, np.arange(start_index * 30, end_index * 30))
+
+    start_index = this_session['medium_start'][0][0] * 60 + this_session['medium_start'][0][1]
+    end_index = this_session['medium_end'][0][0] * 60 + this_session['medium_end'][0][1]
+    frame_index = np.append(frame_index, np.arange(start_index * 30, end_index * 30))
+
+    start_index = this_session['fast_start'][0][0] * 60 + this_session['fast_start'][0][1]
+    end_index = this_session['fast_end'][0][0] * 60 + this_session['fast_end'][0][1]
+    frame_index = np.append(frame_index, np.arange(start_index * 30, end_index * 30))
+
+    return frame_index.flatten()
+
+
 def detect_markers(
     session_directory,
     session_folder,
     param_dict,
+    sessions_dict,
     world_scale=1,
     progress_bar=tqdm.tqdm,
 ):
@@ -59,9 +94,9 @@ def detect_markers(
     """
     print(param_dict.keys())
     # Todo: Read length of the session id from parameters?
-    session_id = session_folder[-19:] + '/'
-    output_path = param_dict['directory']['saving_directory'] + session_id
-    processed_path = param_dict['directory']['gaze_directory'] + session_id
+    session_id = session_folder[-19:]
+    output_path = param_dict['directory']['saving_directory'] + session_id + '/'
+    processed_path = param_dict['directory']['gaze_directory'] + session_id + '/'
     if not os.path.exists(processed_path):
         os.makedirs(processed_path)
     # Deal with inputs
@@ -70,6 +105,7 @@ def detect_markers(
         raise ValueError("parameters' yaml file doesn't have valid saving_directory!")
     else:
         print("saving results to: ", output_path)
+
 
     start_time = param_dict['visualization']['start_time']
     end_time = param_dict['visualization']['end_time']
@@ -96,7 +132,7 @@ def detect_markers(
         print("creating", output_path)
         os.makedirs(output_path)
     # (0) Get session
-    session = vedb_store.Session(folder=session_folder)
+    # session = vedb_store.Session(folder=session_folder)
     # (1) Read Start and End Indexes
     start_index = (start_time[0] * 60 + start_time[1]) * fps
     end_index = (end_time[0] * 60 + end_time[1]) * fps
@@ -117,18 +153,20 @@ def detect_markers(
     #     print(key, value)
 
     # (3) Read Video File
-    world_video_file = param_dict['directory']['session_directory'] + session_id + "world.mp4"
+    world_video_file = param_dict['directory']['session_directory'] + session_id + "/world.mp4"
     print("world Video File: ", world_video_file)
     vid = imageio.get_reader(world_video_file, "ffmpeg")
     cap = cv2.VideoCapture(world_video_file)
-    world_time_stamp_file = param_dict['directory']['session_directory'] + session_id + "world_timestamps.npy"
+    world_time_stamp_file = param_dict['directory']['session_directory'] + session_id + "/world_timestamps.npy"
     world_time_stamp = np.load(world_time_stamp_file)
     if run_for_all_frames:
         total_frame_numbers = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
         start_index = 0
         end_index = total_frame_numbers
         print("Total Number of Frames: ", total_frame_numbers)
-    imgpoints, marker_found = detect_checkerboard(path=session_folder, checkerboard_size=(6,8), scale=world_scale, start_seconds=start_index, end_seconds=end_index)
+    this_session = sessions_dict['sessions'][session_id]
+    frame_index_array = create_slippage_index_array(sessions_dict, session_id)
+    imgpoints, marker_found = detect_checkerboard(path=session_folder, checkerboard_size=(6,8), scale=world_scale, frame_index_array=frame_index_array, this_session=this_session)
     print("marker point size: ", np.array(imgpoints).shape)
     print("marker flag size: ", np.array(marker_found).shape)
     marker_file_name = processed_path + "validation_points.npy"
