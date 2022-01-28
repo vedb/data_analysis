@@ -6,7 +6,7 @@ from data_analysis import visualization
 
 # Directory for the recording sessions
 parameters_fpath = "/home/kamran/Code/data_analysis/data_analysis/visualization/visualization_parameters.yaml"
-sessions_fpath = "/home/kamran/Code/data_analysis/data_analysis/visualization/sessions_list.yaml"
+sessions_fpath = "/home/kamran/Code/data_analysis/data_analysis/visualization/journal_sessions_list.yaml"
 def parse_pipeline_parameters(parameters_fpath):
     param_dict = dict()
     with open(parameters_fpath,"r") as stream:

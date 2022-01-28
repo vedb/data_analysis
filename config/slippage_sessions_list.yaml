@@ -111,7 +111,7 @@ sessions:
 #        - [7,45]
 #      fast_validation_end:
 #        - [8,20]
-#
+##
 #    '2021_07_14_17_30_31': # Kamran's treadmill session
 #      rig: V1
 #      calibration: True
@@ -148,7 +148,7 @@ sessions:
 #        - [7,54]
 #      fast_validation_end:
 #        - [8,30]
-#
+##
 #    '2021_07_16_12_29_06': # Savvy's treadmill session
 #      rig: V1
 #      calibration: True
@@ -896,42 +896,42 @@ sessions:
 ############### End of Slippage Data UNR ##############
 
 ############## Slippage Data Bates ##############
-    '2021_08_04_12_13_27':  # Jen's treadmill session
-      rig: V2
-      calibration: True
-      validation: True
-      calibration_start:
-        - [2,9]
-      calibration_end:
-        - [2,49]
-      validation_start:
-        - [2,51]
-      validation_end:
-        - [3,30]
-      slow_start:
-        - [3,39]
-      slow_end:
-        - [5,20]
-      slow_validation_start:
-        - [5,25]
-      slow_validation_end:
-        - [6,1]
-      medium_start:
-        - [6,12]
-      medium_end:
-        - [7,12]
-      medium_validation_start:
-        - [7,17]
-      medium_validation_end:
-        - [7,50]
-      fast_start:
-        - [7,58]
-      fast_end:
-        - [9,4]
-      fast_validation_start:
-        - [9,10]
-      fast_validation_end:
-        - [9,44]
+#    '2021_08_04_12_13_27':  # Jen's treadmill session
+#      rig: V2
+#      calibration: True
+#      validation: True
+#      calibration_start:
+#        - [2,9]
+#      calibration_end:
+#        - [2,49]
+#      validation_start:
+#        - [2,51]
+#      validation_end:
+#        - [3,30]
+#      slow_start:
+#        - [3,39]
+#      slow_end:
+#        - [5,20]
+#      slow_validation_start:
+#        - [5,25]
+#      slow_validation_end:
+#        - [6,1]
+#      medium_start:
+#        - [6,12]
+#      medium_end:
+#        - [7,12]
+#      medium_validation_start:
+#        - [7,17]
+#      medium_validation_end:
+#        - [7,50]
+#      fast_start:
+#        - [7,58]
+#      fast_end:
+#        - [9,4]
+#      fast_validation_start:
+#        - [9,10]
+#      fast_validation_end:
+#        - [9,44]
 
     '2021_08_03_17_35_56':  # Michelle's treadmill session
       rig: V2

@@ -6,6 +6,9 @@ import scipy.interpolate
 from scipy.stats import multivariate_normal
 import matplotlib.pyplot as plt
 import seaborn as sns
+from ..scene.scene_utils import undistort_unproject_pts
+from ..gaze.gaze_utils import remove_outlier, remove_non_fixation
+from matplotlib.lines import Line2D
 
 
 def plot_gaze_accuracy(reference_pos, gaze_pos, confidence):
@@ -320,3 +323,170 @@ def plot_calibration(point_mapper,):
 
 def plot_pupil_condifence_BP(right_pupil, left_pupil, sessions):
     return True
+
+
+def plot_gaze_accuracy_contour(marker, gaze_pos, confidence, file_name, reference_type="calibration"):
+    """
+
+    """
+    import numpy.ma as ma
+    horizontal_pixels = 2048
+    vertical_pixels = 1536
+    frame_width = 2048.0
+    frame_height = 1536.0
+
+    azimuthRange = (-55, 55)  # (0, 2048)
+    elevationRange = (-40, 40)  # (0, 1536)
+    np.random.seed(0)
+    max_gaze_error = 8
+    number_of_levels = np.arange(0, max_gaze_error)
+
+    camera_matrix = np.load("/home/kamran/Desktop/test_codes/UNR_ML/camera_matrix.npy")
+    dist_coefs = np.load("/home/kamran/Desktop/test_codes/UNR_ML/distortion_coefficients.npy")
+    print("K = ", camera_matrix)
+    print("D = ", dist_coefs)
+    a = []
+    b = []
+    for p in gaze_pos:
+        a.append(p[0])
+        b.append(p[1])
+    gaze_pos = np.array([a, b]).T
+
+    if len(confidence) > 1:
+        threshold = 0.7
+        valid_index = np.argwhere(np.asarray(confidence) > threshold)
+        #         print(valid_index)
+
+        gaze_norm_x = gaze_pos[valid_index, 0] * 0.5 * frame_width
+        gaze_norm_y = (1 - gaze_pos[valid_index, 1] * 0.5) * frame_height
+        if reference_type == "calibration":
+            marker_norm_x = marker[valid_index, 0] * 0.5
+            marker_norm_y = frame_height - marker[valid_index, 1] * 0.5
+        elif reference_type == "validation":
+            marker_norm_x = marker[valid_index, 0]
+            marker_norm_y = frame_height - marker[valid_index, 1]
+    else:
+        threshold = None
+        gaze_norm_x = gaze_pos[:, 0] * frame_width / 4
+        gaze_norm_y = gaze_pos[:, 1] * frame_height / 4
+        if reference_type == "calibration":
+            marker_norm_x = marker[:, 0] * 0.25
+            marker_norm_y = marker[:, 1] * 0.25
+        elif reference_type == "validation":
+            marker_norm_x = marker[:, 0] * 0.5
+            marker_norm_y = marker[:, 1] * 0.5
+
+    #     center_az, center_el = find_focal_point_degrees(camera_matrix, dist_coefs)
+    pts_3d_d = np.array([gaze_norm_x, gaze_norm_y]).T
+    pts_3d = undistort_unproject_pts(pts_3d_d, camera_matrix, dist_coefs)
+    gaze_pixel_x = np.arctan2(pts_3d[:, 0], np.ones(len(pts_3d[:, 0]))) * 180 / np.pi  # * horizontal_pixels
+    gaze_pixel_y = np.arctan2(pts_3d[:, 1], np.ones(len(pts_3d[:, 0]))) * 180 / np.pi  # * vertical_pixels
+
+    #     if reference_type == 'Calibration':
+    pts_3d_d = np.array([marker_norm_x, marker_norm_y]).T
+    pts_3d = undistort_unproject_pts(pts_3d_d, camera_matrix, dist_coefs)
+    #     print("Undistorted Points_3d:\n", pts_3d)
+
+    marker_pixel_x = np.arctan2(pts_3d[:, 0], np.ones(len(pts_3d[:, 0]))) * 180 / np.pi  #
+    marker_pixel_y = np.arctan2(pts_3d[:, 1], np.ones(len(pts_3d[:, 0]))) * 180 / np.pi  # np.ones(len(pts_3d[:,0]))
+
+    #     else:
+    #         marker_pixel_x = marker_norm_x * 2# horizontal_pixels
+    #         marker_pixel_y = marker_norm_y * 4# vertical_pixels
+
+    #     gaze_pixel_x = gaze_pixel_x * (110/2048) - 55
+    #     gaze_pixel_y = gaze_pixel_y * (90 / 1536) - 45
+
+    #     marker_pixel_x = marker_pixel_x *  (110/2048) - 55
+    #     marker_pixel_y = marker_pixel_y *  (90/1536) - 45
+
+    print("Before SR: gaze shape = ", gaze_pixel_x.shape, gaze_pixel_y.shape)
+    print("Before SR: marker shape = ", marker_pixel_x.shape, marker_pixel_y.shape)
+    colors = np.power(np.power(marker_pixel_x - gaze_pixel_x, 2) + np.power(marker_pixel_y - gaze_pixel_y, 2), 0.5)
+    marker_pixel_x, marker_pixel_y, gaze_pixel_x, gaze_pixel_y, colors = remove_non_fixation(marker_pixel_x,
+                                                                                             marker_pixel_y,
+                                                                                             gaze_pixel_x,
+                                                                                             gaze_pixel_y,
+                                                                                             colors,
+                                                                                             threshold=1)
+    print("After SR: gaze shape = ", gaze_pixel_x.shape, gaze_pixel_y.shape)
+    print("After SR: marker shape = ", marker_pixel_x.shape, marker_pixel_y.shape)
+
+    marker_pixel_x, marker_pixel_y, gaze_pixel_x, gaze_pixel_y, colors = remove_outlier(marker_pixel_x,
+                                                                                        marker_pixel_y,
+                                                                                        gaze_pixel_x,
+                                                                                        gaze_pixel_y,
+                                                                                        colors,
+                                                                                        threshold=10)
+    print("After OR: gaze shape = ", gaze_pixel_x.shape, gaze_pixel_y.shape)
+    print("After OR: marker shape = ", marker_pixel_x.shape, marker_pixel_y.shape)
+
+    if len(gaze_pixel_x) < 5:
+        print("Not enough gaze/marker samples to plot!! {}".format(len(gaze_pixel_x)))
+        return marker_pixel_x, marker_pixel_y, gaze_pixel_x, gaze_pixel_y, colors
+    z = colors
+    x = gaze_pixel_x
+    y = gaze_pixel_y
+    xy = np.column_stack([x.flat, y.flat])  # Create a (N, 2) array of (x, y) pairs.
+
+    # plt.scatter(x, y)
+    # plt.savefig('scatterplot.png', dpi=300)
+
+    # plt.tricontourf(x, y, z)
+    # plt.savefig('tricontourf.png', dpi=300)
+
+    # Interpolate and generate heatmap:
+    # grid_x, grid_y = np.mgrid[x.min():x.max():50j, y.min():y.max():50j]
+    # grid_x, grid_y = np.mgrid[0:10:1000j, 0:10:1000j]
+    x = marker_pixel_x
+    y = marker_pixel_y
+    xy = np.column_stack([x.flat, y.flat])  # Create a (N, 2) array of (x, y) pairs.
+    grid_x, grid_y = np.mgrid[x.min():x.max():500j, y.min():y.max():500j]
+
+    legend_elements = [Line2D([0], [0], marker='X', lw=0, color='green', label='gaze',
+                              markerfacecolor='green', markersize=12, markeredgecolor='green'),
+                       Line2D([0], [0], marker='o', lw=0, color='yellow', label='target',
+                              markerfacecolor='yellow', markersize=12, markeredgecolor='gray', markeredgewidth=2.0)]
+
+    for method in ['linear']:  # , 'nearest','cubic'] :
+        fig = plt.figure(figsize=(15, 10))
+        # CS = plt.contour(marker_pixel_x, marker_pixel_y, z)
+        # plt.clabel(CS, inline=1, fontsize=10)
+        # plt.title('Simplest default with labels')
+        #         grid_z = scipy.interpolate.griddata(xy, z, (grid_x, grid_y), method=method)
+        #         print(len(grid_z))
+        #         plt.pcolormesh(grid_x, grid_y, ma.masked_invalid(grid_z), cmap='YlOrRd', vmin=0, vmax=10)
+
+        plt.tricontour(marker_pixel_x, marker_pixel_y, colors, levels=number_of_levels, linewidths=0.5, colors='k')
+        cntr2 = plt.tricontourf(marker_pixel_x, marker_pixel_y, colors, levels=number_of_levels, cmap="YlOrRd")
+        cbar = fig.colorbar(cntr2)
+        cbar.set_label("gaze error (dVA)", rotation=90, fontsize=16)
+
+        plt.scatter(gaze_pixel_x, gaze_pixel_y, edgecolors='face', c="green", marker="x", s=50, cmap='YlOrRd',
+                    alpha=0.7, vmin=0,
+                    vmax=max_gaze_error)
+        plt.scatter(marker_pixel_x, marker_pixel_y, edgecolors='grey', c=colors, s=50, cmap='YlOrRd', alpha=1, vmin=0,
+                    vmax=max_gaze_error)
+
+        #         plt.axes().set_aspect('equal')
+        #         plt.gca().set_aspect('equal')
+        plt.axis('equal')
+        plt.title('Gaze Accuracy [{0}] Confidence>{1}'.format("validation", threshold), fontsize=20)  # reference_type
+        #         plt.xlim(azimuthRange)
+        #         plt.ylim(elevationRange)
+        plt.gca().set_xlim(azimuthRange)
+        plt.gca().set_ylim(elevationRange)
+
+        plt.legend(handles=legend_elements, fontsize=16)
+        cbar.ax.tick_params(labelsize=16)
+        plt.grid(True)
+        plt.xlabel('azimuth (degree)', fontsize=18)
+        plt.ylabel('elevation (degree)', fontsize=18)
+
+        plt.xticks(fontsize=18)
+        plt.yticks(fontsize=18)
+        #         file_name = ""
+        #         plt.savefig(file_name, dpi=200)
+        plt.show()
+    #         plt.close()
+    return marker_pixel_x, marker_pixel_y, gaze_pixel_x, gaze_pixel_y, colors
