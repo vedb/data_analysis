@@ -67,8 +67,8 @@ if __name__ == "__main__":
     sessions_param_path = "/home/kamran/Code/data_analysis/config/journal_sessions_list.yaml"
     viz_param_path = "/home/kamran/Code/data_analysis/config/visualization_parameters.yaml"
 
-    gaze_path = "/hdd01/kamran_sync/processed/gaze_pilot/"
-    viz_path = "/hdd01/kamran_sync/processed/visualization//"
+    # gaze_path = "/hdd01/kamran_sync/processed/gaze_pilot/"
+    # viz_path = "/hdd01/kamran_sync/processed/visualization//"
 
     pipeline_params, session_params, viz_params = read_process_configs(pipeline_param_path,
                                                                        sessions_param_path,
