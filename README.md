@@ -34,6 +34,8 @@ This repository has four major components:
   * Detected object by mediapipe
   * Eye image annotation tool:
     * This tool is used to create semantic segmentation mask for eye images as ground truth 
+## How to run the code:
+The documentation for this is under development. Follow the steps (here)[https://docs.google.com/document/d/1XJtKn_wCRJewjzfN7S6-97kE2ln-9GA2WQIehJphBKo/edit?usp=sharing] which guides you step by step. (Ping Kamran if you don't have access)
 ## Development milestones and projects:
 * **[Data Loading](https://github.com/vedb/data_analysis/milestone/1)**
   * Improve performance during loading
