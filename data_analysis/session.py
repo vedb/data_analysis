@@ -63,12 +63,14 @@ class Session:
                 self.t265_video_isOpen = True
             return self.t265_video
 
-    def video_frame_size_cv2(self, video):
+    @staticmethod
+    def video_frame_size_cv2(video):
         frame_height = int(video.get(cv2.CAP_PROP_FRAME_HEIGHT))
         frame_width = int(video.get(cv2.CAP_PROP_FRAME_WIDTH))
         return (frame_width, frame_height)
 
-    def video_total_frame_count_cv2(self, video):
+    @staticmethod
+    def video_total_frame_count_cv2(video):
         return int(video.get(cv2.CAP_PROP_FRAME_COUNT))
 
     def close_video_cv2(self, video_name):
